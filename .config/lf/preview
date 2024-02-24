@@ -1,0 +1,34 @@
+#!/bin/sh
+
+case "$(file --dereference --brief --mime-type -- "$1")" in
+	*/pdf) 
+		THUMB="/tmp/lfimgthumb"
+		pdftoppm -png -r 60 -f 1 -singlefile "$1" "$THUMB"
+    	chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$THUMB.png"
+    	rm "$THUMB.png"
+    	;;
+    *wordprocessingml*)
+		docx2txt.pl "$1" - | fold -w "$2"
+		;;
+	application/msword) 
+		textutil -stdout -cat txt "$1" | fold -w "$2"
+		;;
+    text/* | */xml | application/json | application/x-ndjson) 
+		bat --paging=never --style=numbers --terminal-width $(($2-5)) -f "$1"
+		;;
+	image/*)
+		command chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$1" 
+		;;
+	application/zip) 
+		unzip -l "$1" | fold -w "$2" 
+		;;
+	application/gzip) 
+		tar tf "$1" | fold -w "$2"
+		;;
+	video/*)
+		THUMB="/tmp/lfvideothumb.png"
+		ffmpegthumbnailer -i "$1" -o "$THUMB" -s 0
+    	chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$THUMB"
+    	rm "$THUMB"
+    	;;
+esac
