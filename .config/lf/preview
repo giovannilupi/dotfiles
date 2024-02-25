@@ -1,12 +1,24 @@
 #!/bin/sh
 
+# Preview function for compressed archives
+previewarchive() {
+	case "$1" in
+		*.tgz|*.tar.gz) tar tzf "$1" | fold -w "$2" ;;
+		*.tar.bz2|*.tbz2) tar tjf "$1" | fold -w "$2" ;;
+		*.tar.txz|*.txz) xz --list "$1" | fold -w "$2" ;;
+		*.tar) tar tf "$1" | fold -w "$2" ;;
+		*.zip|*.jar|*.war|*.ear|*.oxt) unzip -l "$1" | fold -w "$2" ;;
+		*.gz) gzip -l "$1" | fold -w "$2" ;;
+		*.rar) unrar l "$1" | fold -w "$2" ;;
+	esac
+}
+
+# Default preview for unrecognized file types
 defaultprint() {
 	filename=$(basename "$1")
 	width=$2
-	line=$(printf '─%.0s' $(seq 1 $width))
-	echo "$line"
-	echo "File: \033[1m$filename\033[0m"
-	echo "$line"
+	line=$(printf '─%.0s' $(seq 1 "$width"))
+	printf "%s\nFile: \033[1m%s\033[0m\n%s\n" "$line" "$filename" "$line"
 	file_output=$(file -Lb "$1" | fold -w "$width")
 	echo "<$file_output>"
 }
@@ -33,13 +45,10 @@ case "$(file --dereference --brief --mime-type -- "$1")" in
 	image/*)
 		command chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$1" 
 		;;
-	application/zip) 
-		unzip -l "$1" | fold -w "$2" 
+	application/zip | application/x-tar | application/gzip | application/*-7z-* | application/x-rar | application/x-xz | application/java-archive) 
+		previewarchive "$1" "$2"
 		;;
-	application/gzip) 
-		tar tf "$1" | fold -w "$2"
-		;;
-	video/*)
+	video/* | audio/*)
 		THUMB="/tmp/lfvideothumb.png"
 		ffmpegthumbnailer -i "$1" -o "$THUMB" -s 0
     	chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$THUMB"
