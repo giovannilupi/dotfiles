@@ -168,6 +168,7 @@ crange() {
     # Select lines
   local sr
   if sr=$(bat --color=always -n "$1"); then
+    if [[ -z "$sr" ]]; then return; fi
     sr=$(printf "%s" "$sr" | fzf --ansi -m -e --reverse | awk '{print $1}' | sort -n)
     local minl=$(echo "$sr" | head -n 1)
     local maxl=$(echo "$sr" | tail -n 1)
