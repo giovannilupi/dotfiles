@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Preview function for images
+printimage() {
+	#command chafa -f symbols -O 0 -s "$2x$3" --animate off --polite on "$1"
+	command chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$1"
+}
+
 # Preview function for compressed archives
 previewarchive() {
 	case "$1" in
@@ -10,6 +16,7 @@ previewarchive() {
 		*.zip|*.jar|*.war|*.ear|*.oxt) unzip -l "$1" | fold -w "$2" ;;
 		*.gz) gzip -l "$1" | fold -w "$2" ;;
 		*.rar) unrar l "$1" | fold -w "$2" ;;
+		*.7z) 7z l "$1" | fold -w "$2" ;;
 	esac
 }
 
@@ -27,7 +34,7 @@ case "$(file --dereference --brief --mime-type -- "$1")" in
 	*/pdf) 
 		THUMB="/tmp/lfimgthumb"
 		pdftoppm -png -r 60 -f 1 -singlefile "$1" "$THUMB"
-    	chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$THUMB.png"
+    	printimage "$THUMB.png" "$2" "$3"
     	rm "$THUMB.png"
     	;;
     *wordprocessingml*)
@@ -43,7 +50,7 @@ case "$(file --dereference --brief --mime-type -- "$1")" in
 		bat --color=always --paging=never --style=numbers --terminal-width $(($2-5)) "$1"
 		;;
 	image/*)
-		command chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$1" 
+		printimage "$1" "$2" "$3"
 		;;
 	application/zip | application/x-tar | application/gzip | application/*-7z-* | application/x-rar | application/x-xz | application/java-archive) 
 		previewarchive "$1" "$2"
@@ -51,7 +58,7 @@ case "$(file --dereference --brief --mime-type -- "$1")" in
 	video/* | audio/*)
 		THUMB="/tmp/lfvideothumb.png"
 		ffmpegthumbnailer -i "$1" -o "$THUMB" -s 0
-    	chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$THUMB"
+    	printimage "$THUMB" "$2" "$3"
     	rm "$THUMB"
     	;;
 	*)
