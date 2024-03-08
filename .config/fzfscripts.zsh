@@ -56,15 +56,6 @@ Use Enter in the fzf previewer to select a file and open it in VSCode.\n
 # Functions
 # -----------------------------------------------------------
 
-custom_preview() {
-    case "$(file --dereference --brief --mime-type -- "$1")" in
-      image/*)
-        echo image ;;
-      *)
-        echo text ;;
-    esac
-}
-
 # Interactively find a file and open it in VSCode
 ffile() {
   local fd_opts
@@ -133,8 +124,8 @@ fdir() {
   fzf --ansi -e \
       --color "hl:-1:underline,hl+:-1:underline:reverse" \
       --delimiter : \
-      --preview 'eza --icons --color=always --group-directories-first {}' \
-      --preview-window 'up,40%,border-bottom,+{2}+3/3,~3')"
+      --preview-window 'up,40%,border-bottom,+{2}+3/3,~3' \
+      --preview 'eza --icons --color=always --group-directories-first {}')"
     cd "$dir"
 }
 

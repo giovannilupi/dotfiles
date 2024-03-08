@@ -61,6 +61,9 @@ case "$(file --dereference --brief --mime-type -- "$1")" in
     	printimage "$THUMB" "$2" "$3"
     	rm "$THUMB"
     	;;
+	inode/directory)
+		eza --icons --color=always --group-directories-first --width "$2" "$1"
+		;;
 	*)
 		defaultprint "$1" "$2"
 		;;
