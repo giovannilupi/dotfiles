@@ -132,3 +132,20 @@ source ~/.config/fzfscripts.zsh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Forgit configuration
+# Homebrew installation, for Linux install as ohmyzsh plugin instead
+export FORGIT_PAGER="delta --navigate -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS} --wrap-max-lines 2"
+export FORGIT_FZF_DEFAULT_OPTS="--height='100%' --color 'hl:-1:underline,hl+:-1:underline:reverse' --preview-window 'up,40%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_BLAME_PAGER="delta --navigate --hyperlinks"
+export FORGIT_DIFF_PAGER="delta --navigate --side-by-side --line-numbers-right-format='│ ' -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS} --wrap-max-lines 2"
+export FORGIT_DIFF_FZF_OPTS="--preview-window 'up,80%,border-bottom,+{2}+3/3,~3'" 
+export FORGIT_ADD_FZF_OPTS="--preview-window 'up,60%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_LOG_FZF_OPTS="--preview-window 'up,50%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_CHECKOUT_FILE_FZF_OPTS="--preview-window 'up,75%,border-bottom,+{2}+3/3,~3'" 
+export FORGIT_CHECKOUT_BRANCH_BRANCH_GIT_OPTS="--list"
+export FORGIT_CHECKOUT_BRANCH_FZF_OPTS="--preview-window 'up,35%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_BRANCH_DELETE_FZF_OPTS=""
+
+[ -f /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh ] && source /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh
+
