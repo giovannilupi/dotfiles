@@ -1,0 +1,72 @@
+// ~/.config/fastfetch/config.jsonc
+// See https://github.com/fastfetch-cli/fastfetch/wiki/Configuration for more details
+// See *.jsonc in https://github.com/fastfetch-cli/fastfetch/tree/dev/presets/examples for more examples
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "padding": {"left": 2, "top": 1},
+    "height": 11,
+    "width": 23,
+    "preserveAspectRatio": true,
+    "type": "iterm",
+    "source": "~/.config/fastfetch/fflogo.jpg"
+  },
+  "display": {
+    "separator": "  "
+  },
+  "modules": [
+    "break",
+    {
+      "type": "custom",
+      "format": "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
+    },
+    {
+      "type": "os",
+      "key": "  ",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "kernel",
+      "key": "  ",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "terminal",
+      "key": "  ",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "shell",
+      "key": "  ",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "custom",
+      "format": "┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫"
+    },
+    {
+      "type": "host",
+      "key": "  ",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "cpu",
+      "key": "  ",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "gpu",
+      "key": "  󱤓",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "memory",
+      "key": "  󰍛",
+      "keyColor": "dim_red"
+    },
+    {
+      "type": "custom",
+      "format": "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+    }
+  ]
+}

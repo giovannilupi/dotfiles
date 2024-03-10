@@ -167,6 +167,7 @@ cmd trash %{{
     read -r ans
     case "$ans" in
         [Yy]*)
+            printf "Moving files to trash...\n"
             successful=()
             failed=()
             error_file=$(mktemp)
@@ -200,6 +201,7 @@ cmd delete %{{
     read -r ans
     case "$ans" in
         [Yy]*)
+            printf "Deleting files...\n"
             successful=()
             failed=()
             error_file=$(mktemp)

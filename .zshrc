@@ -1,3 +1,4 @@
+fastfetch
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -148,4 +149,3 @@ export FORGIT_CHECKOUT_BRANCH_FZF_OPTS="--preview-window 'up,35%,border-bottom,+
 export FORGIT_BRANCH_DELETE_FZF_OPTS=""
 
 [ -f /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh ] && source /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh
-
