@@ -94,7 +94,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Aliases
 alias dotfiles='git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
-alias batp="bat -p -P"
+alias cat="bat -p -P"
 alias ls="eza --icons --group-directories-first"
 alias ll="eza --long --icons --group-directories-first"
 alias la="eza --long --icons --group-directories-first -a"
@@ -129,6 +129,8 @@ tgptf() {
 
 source ~/.config/fzfscripts.zsh
 
+export BAT_THEME=gruvbox-dark
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -149,3 +151,5 @@ export FORGIT_CHECKOUT_BRANCH_FZF_OPTS="--preview-window 'up,35%,border-bottom,+
 export FORGIT_BRANCH_DELETE_FZF_OPTS=""
 
 [ -f /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh ] && source /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh
+
+export PATH="$PATH:~/local/bin"

@@ -13,6 +13,7 @@ set autoquit true
 set mouse true
 set scrolloff 10
 set cursorpreviewfmt "\033[7;2m"
+set drawbox true
 # Shell settings
 set shell zsh
 set shellopts '-euy'
