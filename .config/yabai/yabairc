@@ -1,0 +1,70 @@
+#!/usr/bin/env sh
+
+# for this to work you must configure sudo such that
+# it will be able to run the command without password
+
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+# -----------------------------------------------------------
+# Layout settings
+# -----------------------------------------------------------
+
+# Tile windows in all workspaces
+yabai -m config layout bsp
+# New window spawns to the right if vertical split, or bottom if horizontal split
+yabai -m config window_placement second_child
+# Disable auto balance window size
+yabai -m config auto_balance off
+# After a split, old and new window occupy the same space
+yabai -m config split_ratio 0.5
+
+# -----------------------------------------------------------
+# Padding settings
+# -----------------------------------------------------------
+
+yabai -m config top_padding 05
+yabai -m config bottom_padding 05
+yabai -m config left_padding 05
+yabai -m config right_padding 05
+yabai -m config window_gap 05
+
+# -----------------------------------------------------------
+# Mouse settings
+# -----------------------------------------------------------
+
+# Disable cursor being automatically moved to the focused window
+yabai -m config mouse_follows_focus off
+# Focus windows without having to click on them
+yabai -m config focus_follows_mouse autoraise
+
+# -----------------------------------------------------------
+# Opacity settings
+# -----------------------------------------------------------
+
+# Enable opacity for windows.
+yabai -m config window_opacity on
+# Opacity for focused windows
+yabai -m config active_window_opacity 1.0
+# Opacity for unfocused windows
+yabai -m config normal_window_opacity 0.9
+# Duration of transition between active / normal opacity
+yabai -m config window_opacity_duration 0.0
+
+# -----------------------------------------------------------
+# Misc settings
+# -----------------------------------------------------------
+
+# modify window shadows (default: on, options: on, off, float)
+# example: show shadows only for floating windows
+#yabai -m config window_shadow on
+# Disable animation for change in dimension
+yabai -m config window_animation_duration 0.0
+# Mouse drag selection color
+yabai -m config insert_feedback_color 0xff519aba
+
+# -----------------------------------------------------------
+# Float settings
+# -----------------------------------------------------------
+
+yabai -m rule --add app="^System Settings$" manage=off
