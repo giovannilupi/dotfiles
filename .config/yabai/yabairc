@@ -37,6 +37,12 @@ yabai -m config window_gap 05
 yabai -m config mouse_follows_focus off
 # Focus windows without having to click on them
 yabai -m config focus_follows_mouse autoraise
+# Keyboard modifier used for moving windows
+yabai -m config mouse_modifier ctrl
+# Left click action
+yabai -m config mouse_action1 move
+# Action performed when a managed window is dropped in the center of another
+yabai -m config mouse_drop_action swap
 
 # -----------------------------------------------------------
 # Opacity settings
@@ -55,9 +61,6 @@ yabai -m config window_opacity_duration 0.0
 # Misc settings
 # -----------------------------------------------------------
 
-# modify window shadows (default: on, options: on, off, float)
-# example: show shadows only for floating windows
-#yabai -m config window_shadow on
 # Disable animation for change in dimension
 yabai -m config window_animation_duration 0.0
 # Mouse drag selection color
@@ -68,3 +71,5 @@ yabai -m config insert_feedback_color 0xff519aba
 # -----------------------------------------------------------
 
 yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Logi Options\+$" manage=off
+yabai -m rule --add app="^Keychron Engine$" manage=off
