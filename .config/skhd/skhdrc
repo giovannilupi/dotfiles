@@ -1,0 +1,64 @@
+# Workspace navigation
+alt - h : yabai -m window --focus west
+alt - j : yabai -m window --focus south
+alt - k : yabai -m window --focus north
+alt - l : yabai -m window --focus east
+
+# Moving windows within workspace
+shift + alt - h : yabai -m window --warp west
+shift + alt - j : yabai -m window --warp south
+shift + alt - k : yabai -m window --warp north
+shift + alt - l : yabai -m window --warp east
+
+# Increase window size
+shift + alt - a : yabai -m window --resize left:-20:0
+shift + alt - s : yabai -m window --resize bottom:0:20
+shift + alt - w : yabai -m window --resize top:0:-20
+shift + alt - d : yabai -m window --resize right:20:0
+
+# Decrease window size
+shift + cmd - a : yabai -m window --resize left:20:0
+shift + cmd - s : yabai -m window --resize bottom:0:-20
+shift + cmd - w : yabai -m window --resize top:0:20
+shift + cmd - d : yabai -m window --resize right:-20:0
+
+# Rotate on X and Y Axis
+shift + alt - x : yabai -m space --mirror x-axis
+shift + alt - y : yabai -m space --mirror y-axis
+
+# Rebalance size of windows
+shift + alt - e : yabai -m space --balance
+
+# Toggle / untoggle maximize
+shift + alt - m : yabai -m window --toggle zoom-fullscreen
+
+# Float / unfloat window and center on screen
+shift + alt - t : yabai -m window --toggle float --grid 20:20:1:1:18:18
+
+# Move window to specific workspace
+ctrl + shift - 1 : yabai -m window --space  1; yabai -m space --focus 1
+ctrl + shift - 2 : yabai -m window --space  2; yabai -m space --focus 2
+ctrl + shift - 3 : yabai -m window --space  3; yabai -m space --focus 3
+ctrl + shift - 4 : yabai -m window --space  4; yabai -m space --focus 4
+ctrl + shift - 5 : yabai -m window --space  5; yabai -m space --focus 5
+ctrl + shift - 6 : yabai -m window --space  6; yabai -m space --focus 6
+ctrl + shift - 7 : yabai -m window --space  7; yabai -m space --focus 7
+ctrl + shift - 8 : yabai -m window --space  8; yabai -m space --focus 8
+ctrl + shift - 9 : yabai -m window --space  9; yabai -m space --focus 9
+
+# Create desktop and follow focus
+cmd + alt - n : yabai -m space --create && \
+                 index="$(yabai -m query --spaces --display | jq 'map(select(."is-native-fullscreen" == false))[-1].index')" && \
+                 yabai -m space --focus "${index}"
+
+# Create desktop, move window and follow focus - uses jq for parsing json (brew install jq)
+shift + cmd - n : yabai -m space --create && \
+                   index="$(yabai -m query --spaces --display | jq 'map(select(."is-native-fullscreen" == false))[-1].index')" && \
+                   yabai -m window --space "${index}" && \
+                   yabai -m space --focus "${index}"
+
+# Destroy desktop. Windows in the destroyed desktop are moved to desktop 1.
+cmd + alt - w : yabai -m space --destroy
+
+# Open new terminal windows
+cmd - return : open -na iTerm
