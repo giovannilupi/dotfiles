@@ -34,7 +34,9 @@ yabai -m config window_gap 05
 # -----------------------------------------------------------
 
 # Disable cursor being automatically moved to the focused window
-yabai -m config mouse_follows_focus off
+#yabai -m config mouse_follows_focus off
+# When focusing a window, put the mouse at its center
+yabai -m config mouse_follows_focus on
 # Focus windows without having to click on them
 yabai -m config focus_follows_mouse autoraise
 # Keyboard modifier used for moving windows
@@ -49,13 +51,15 @@ yabai -m config mouse_drop_action swap
 # -----------------------------------------------------------
 
 # Enable opacity for windows.
-yabai -m config window_opacity on
+#yabai -m config window_opacity on
 # Opacity for focused windows
-yabai -m config active_window_opacity 1.0
+#yabai -m config active_window_opacity 1.0
 # Opacity for unfocused windows
-yabai -m config normal_window_opacity 0.9
+#yabai -m config normal_window_opacity 0.9
 # Duration of transition between active / normal opacity
-yabai -m config window_opacity_duration 0.0
+#yabai -m config window_opacity_duration 0.0
+# Force transparency on VSCode
+yabai -m rule --add app="^Code$" opacity=0.96
 
 # -----------------------------------------------------------
 # Misc settings
@@ -73,3 +77,4 @@ yabai -m config insert_feedback_color 0xff519aba
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Logi Options\+$" manage=off
 yabai -m rule --add app="^Keychron Engine$" manage=off
+yabai -m rule --add app="^Discord$" manage=off
