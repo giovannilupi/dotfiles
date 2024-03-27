@@ -13,6 +13,7 @@ set autoquit true
 set mouse true
 set scrolloff 10
 set cursorpreviewfmt "\033[7;2m"
+set errorfmt "\033[37;48;5;88m%s\033[0m"
 set drawbox true
 # Shell settings
 set shell zsh
@@ -46,7 +47,7 @@ cmd newdir %{{
     printf "Enter new directory name(s): "
     # Store new dir names in array
     { IFS=' '; read -r -A names; }
-    if [[ -z "${names[1]}" ]]; then printf "\033[48;5;196;38;5;15m[1] no directory names provided\033[0m\n"; return; fi
+    if [[ -z "${names[1]}" ]]; then printf "\033[37;48;5;88m[1] no directory names provided\033[0m\n"; return; fi
     # Storage for success and failure
     successful=()
     failed=()
@@ -64,13 +65,13 @@ cmd newdir %{{
     # Print outcome
     if [[ ${#failed[@]} -eq 0 ]]; then
         [[ ${#successful[@]} -gt 1 ]] && \
-            printf "\033[48;5;34;38;5;15m[%d] all directories created\033[0m\n" "${#successful[@]}" || \
-            printf "\033[48;5;34;38;5;15m[1] directory %s created\033[0m\n" "${successful[1]}"
+            printf "\033[37;48;5;58m[%d] all directories created\033[0m\n" "${#successful[@]}" || \
+            printf "\033[37;48;5;58m[1] directory %s created\033[0m\n" "${successful[1]}"
     elif [[ ${#failed[@]} -eq 1 ]]; then
-        printf "\033[48;5;196;38;5;15m[1] directory %s could not be created - %s\033[0m\n" "${failed[1]}" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+        printf "\033[37;48;5;88m[1] directory %s could not be created - %s\033[0m\n" "${failed[1]}" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
     else
         IFS=',' result="${failed[*]//,/, }"
-        printf "\033[48;5;196;38;5;15m[%d] some directories could not be created - %s\033[0m\n" "${#failed[@]}" "$result"
+        printf "\033[37;48;5;88m[%d] some directories could not be created - %s\033[0m\n" "${#failed[@]}" "$result"
     fi
 }}
 
@@ -79,7 +80,7 @@ cmd newfile %{{
     printf "Enter new file name(s): "
     # Store new file names in array
     { IFS=' '; read -r -A names; }
-    if [[ -z "${names[1]}" ]]; then printf "\033[48;5;196;38;5;15m[1] no file names provided\033[0m\n"; return; fi
+    if [[ -z "${names[1]}" ]]; then printf "\033[37;48;5;88m[1] no file names provided\033[0m\n"; return; fi
     # Storage for success and failure
     successful=()
     failed=()
@@ -100,22 +101,22 @@ cmd newfile %{{
     # Print outcome
     if [[ ${#failed[@]} -eq 0 ]]; then
         [[ ${#successful[@]} -gt 1 ]] && \
-            printf "\033[48;5;34;38;5;15m[%d] all files created\033[0m\n" "${#successful[@]}" || \
-            printf "\033[48;5;34;38;5;15m[1] file %s created\033[0m\n" "${successful[1]}"
+            printf "\033[37;48;5;58m[%d] all files created\033[0m\n" "${#successful[@]}" || \
+            printf "\033[37;48;5;58m[1] file %s created\033[0m\n" "${successful[1]}"
     elif [[ ${#failed[@]} -eq 1 ]]; then
-        printf "\033[48;5;196;38;5;15m[1] file %s could not be created - %s\033[0m\n" "${failed[1]}" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+        printf "\033[37;48;5;88m[1] file %s could not be created - %s\033[0m\n" "${failed[1]}" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
     else
         IFS=',' result="${failed[*]//,/, }"
-        printf "\033[48;5;196;38;5;15m[%d] some files could not be created - %s\033[0m\n" "${#failed[@]}" "$result"
+        printf "\033[37;48;5;88m[%d] some files could not be created - %s\033[0m\n" "${#failed[@]}" "$result"
     fi
 }}
 
-# Download file with wget
+# Download files with wget
 cmd download %{{
     printf "Enter download link(s): "
     # Store new file names in array
     { IFS=' '; read -r -A links; }
-    if [[ -z "${links[1]}" ]]; then printf "\033[48;5;196;38;5;15m[1] no links provided\033[0m\n"; return; fi
+    if [[ -z "${links[1]}" ]]; then printf "\033[37;48;5;88m[1] no links provided\033[0m\n"; return; fi
     printf "Downloading...\n"
     # Storage for success and failure
     successful=()
@@ -134,14 +135,32 @@ cmd download %{{
     # Print outcome
     if [[ ${#failed[@]} -eq 0 ]]; then
         [[ ${#successful[@]} -gt 1 ]] && \
-            printf "\033[48;5;34;38;5;15m[%d] all files downloaded\033[0m\n" "${#successful[@]}" || \
-            printf "\033[48;5;34;38;5;15m[1] file %s downloaded\033[0m\n" "$(basename "${successful[1]}")"
+            printf "\033[37;48;5;58m[%d] all files downloaded\033[0m\n" "${#successful[@]}" || \
+            printf "\033[37;48;5;58m[1] file %s downloaded\033[0m\n" "$(basename "${successful[1]}")"
     elif [[ ${#failed[@]} -eq 1 ]]; then
-        printf "\033[48;5;196;38;5;15m[1] file %s could not be downloaded - %s\033[0m\n" "$(basename "${successful[1]}")" "$(echo "$err_msg" | tail -n 1 | awk -F ': ' '{print tolower($NF)}')"
+        printf "\033[37;48;5;88m[1] file %s could not be downloaded - %s\033[0m\n" "$(basename "${successful[1]}")" "$(echo "$err_msg" | tail -n 1 | awk -F ': ' '{print tolower($NF)}')"
     else
         result=$(IFS=','; echo "${failed[@]}" | xargs -n1 basename | paste -sd "," - | sed 's/,/, /g')
-        printf "\033[48;5;196;38;5;15m[%d] some files could not be downloaded - %s\033[0m\n" "${#failed[@]}" "$result"
+        printf "\033[37;48;5;88m[%d] some files could not be downloaded - %s\033[0m\n" "${#failed[@]}" "$result"
     fi
+}}
+
+# Copies the specified files in the current directory, does not overwrite existing files
+cmd copyhere %{{
+    printf "Enter file(s) to copy: "
+    read -r files
+    if [[ -z "$files" ]]; then printf "\033[37;48;5;88m[1] no file name provided\033[0m\n"; return; fi
+    printf "Copying...\n"
+    cp_command=$(echo "$files" | awk '{printf "cp -n %s .", $0}')
+    error_file=$(mktemp)
+    if eval "$cp_command 2>$error_file"; then
+        printf "\033[37;48;5;58m[1] all files copied\033[0m\n"
+    else
+        err=$(awk -F ': ' '{print tolower($NF)}' "$error_file")
+        if [ -z "$err" ]; then err="file exists"; fi
+        printf "\033[37;48;5;88m[1] failed to copy some files - %s\033[0m\n" "$err"
+    fi
+    rm -f "$error_file"
 }}
 
 # Git clone
@@ -149,15 +168,15 @@ cmd clone %{{
     printf "Enter link to clone: "
     read -r ans
     if [ -z "$ans" ]; then
-        printf "\033[48;5;196;38;5;15m[1] no link provided\033[0m\n"
+        printf "\033[37;48;5;88m[1] no link provided\033[0m\n"
         return
     fi
     printf "Cloning repository...\n"
     error_file=$(mktemp)
     if git clone "$ans" 2>"$error_file"; then
-        printf "\033[48;5;34;38;5;15m[1] repository cloned\033[0m\n"
+        printf "\033[37;48;5;58m[1] repository cloned\033[0m\n"
     else
-        printf "\033[48;5;196;38;5;15m[1] failed to clone repository - %s\033[0m\n" "$(awk -F ': ' '{print tolower($NF)}' "$error_file")"
+        printf "\033[37;48;5;88m[1] failed to clone repository - %s\033[0m\n" "$(awk -F ': ' '{print tolower($NF)}' "$error_file")"
     fi
     rm -f "$error_file"
 }}
@@ -182,17 +201,17 @@ cmd trash %{{
             done
             rm -f "$error_file"
             if [[ ${#failed[@]} -eq 0 ]]; then
-                printf "\033[48;5;34;38;5;15m[%d] all selected items moved to trash\033[0m\n" "${#successful[@]}"
+                printf "\033[37;48;5;58m[%d] all selected items moved to trash\033[0m\n" "${#successful[@]}"
             elif [[ ${#failed[@]} -eq 1 ]]; then
-                printf "\033[48;5;196;38;5;15m[1] %s - %s\n" "$(basename "${failed[1]}")" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+                printf "\033[37;48;5;88m[1] %s - %s\n" "$(basename "${failed[1]}")" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
             else
                 for i in {1..$#failed}; do failed[$i]="$(basename "${failed[$i]}")"; done
                 IFS=',' result="${failed[*]//,/, }"
-                printf "\033[48;5;196;38;5;15m[%d] some items could not be trashed - %s\033[0m\n" "${#failed[@]}" "$result"
+                printf "\033[37;48;5;88m[%d] some items could not be trashed - %s\033[0m\n" "${#failed[@]}" "$result"
             fi
             ;;
-        [Nn]*) printf "\033[48;5;196;38;5;15m[1] operation aborted\033[0m\n" ;;
-        *) printf "\033[48;5;196;38;5;15m[1] invalid user response\033[0m\n" ;;
+        [Nn]*) printf "\033[37;48;5;88m[1] operation aborted\033[0m\n" ;;
+        *) printf "\033[37;48;5;88m[1] invalid user response\033[0m\n" ;;
     esac
 }}
 
@@ -216,17 +235,17 @@ cmd delete %{{
             done
             rm -f "$error_file"
             if [[ ${#failed[@]} -eq 0 ]]; then
-                printf "\033[48;5;34;38;5;15m[%d] all selected items deleted\033[0m\n" "${#successful[@]}"
+                printf "\033[37;48;5;58m[%d] all selected items deleted\033[0m\n" "${#successful[@]}"
             elif [[ ${#failed[@]} -eq 1 ]]; then
-                printf "\033[48;5;196;38;5;15m[1] failed to delete %s - %s\033[0m\n" "$(basename "${failed[1]}")" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+                printf "\033[37;48;5;88m[1] failed to delete %s - %s\033[0m\n" "$(basename "${failed[1]}")" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
             else
                 for i in {1..$#failed}; do failed[$i]="$(basename "${failed[$i]}")"; done
                 IFS=',' result="${failed[*]//,/, }"
-                printf "\033[48;5;196;38;5;15m[%d] some items could not be deleted - %s\033[0m\n" "${#failed[@]}" "$result"
+                printf "\033[37;48;5;88m[%d] some items could not be deleted - %s\033[0m\n" "${#failed[@]}" "$result"
             fi
             ;;
-        [Nn]*) printf "\033[48;5;196;38;5;15m[1] operation aborted\033[0m\n" ;;
-        *) printf "\033[48;5;196;38;5;15m[1] invalid user response\033[0m\n" ;;
+        [Nn]*) printf "\033[37;48;5;88m[1] operation aborted\033[0m\n" ;;
+        *) printf "\033[37;48;5;88m[1] invalid user response\033[0m\n" ;;
     esac
 }}
 
@@ -235,28 +254,28 @@ cmd rename %{{
     printf "Enter new name: "
     read -r ans
     if [ -z "$ans" ]; then
-        printf "\033[48;5;196;38;5;15m[1] new name cannot be empty\033[0m\n"
+        printf "\033[37;48;5;88m[1] new name cannot be empty\033[0m\n"
         return
     fi
     # Check if the new filename contains a directory separator
     if [[ "$ans" == *"/"* ]]; then
-        printf "\033[48;5;196;38;5;15m[1] new name contains a directory separator\033[0m\n"
+        printf "\033[37;48;5;88m[1] new name contains a directory separator\033[0m\n"
         return
     fi
     # Check if a file with the same name already exists
     # This avoids the possibility of moving a file to a directory in the same path
     if [ -e "$ans" ]; then
         if [ -L "$ans" ]; then anstype="symlink"; elif [ -d "$ans" ]; then anstype="directory"; else anstype="file"; fi
-        printf "\033[48;5;196;38;5;15m[1] a %s already exists with name %s\033[0m\n" "$anstype" "$ans"
+        printf "\033[37;48;5;88m[1] a %s already exists with name %s\033[0m\n" "$anstype" "$ans"
         return
     fi
     # Check $f type
     if [ -L "$f" ]; then ftype="symlink"; elif [ -d "$f" ]; then ftype="directory"; else ftype="file"; fi
     error_file=$(mktemp)
     if mv -f "$f" "$ans" 2>"$error_file"; then
-        printf "\033[48;5;34;38;5;15m[1] $ftype %s renamed to %s\033[0m\n" "$(basename "$f")" "$ans"
+        printf "\033[37;48;5;58m[1] $ftype %s renamed to %s\033[0m\n" "$(basename "$f")" "$ans"
     else
-        printf "\033[48;5;196;38;5;15m[1] $ftype %s could not be renamed - %s\033[0m\n" "$(basename "$f")" "$(awk -F ': ' '{print tolower($NF)}' "$error_file")"
+        printf "\033[37;48;5;88m[1] $ftype %s could not be renamed - %s\033[0m\n" "$(basename "$f")" "$(awk -F ': ' '{print tolower($NF)}' "$error_file")"
     fi
     rm -f "$error_file"
 }}
@@ -273,12 +292,12 @@ cmd extract %{{
         *.zip) ecmd="unzip -n '$f'";;
         *.rar) ecmd="unrar x -inul -o- '$f'";;
         *.7z) ecmd="7z x -aos '$f'";;
-        *) printf "\033[48;5;196;38;5;15m[1] Unrecognized archive type\033[0m\n"; return 1;;
+        *) printf "\033[37;48;5;88m[1] Unrecognized archive type\033[0m\n"; return 1;;
     esac
     if eval "$ecmd > /dev/null 2>&1"; then
-        printf "\033[48;5;34;38;5;15m[1] Archive %s extracted %s\033[0m\n" "$(basename "$f")"
+        printf "\033[37;48;5;58m[1] Archive %s extracted %s\033[0m\n" "$(basename "$f")"
     else
-        printf "\033[48;5;196;38;5;15m[1] Could not extract archive %s"
+        printf "\033[37;48;5;88m[1] Could not extract archive %s"
     fi
 }}
 
@@ -286,15 +305,15 @@ cmd extract %{{
 cmd zip %{{
     printf "Enter new archive name: "
     read -r ans
-    if [ -z "$ans" ]; then printf "\033[48;5;196;38;5;15m[1] new name cannot be empty\033[0m\n"; return; fi
+    if [ -z "$ans" ]; then printf "\033[37;48;5;88m[1] new name cannot be empty\033[0m\n"; return; fi
     ans="${ans%.zip}"
     # Check if a file with the same name already exists
-    if [ -e "$ans.zip" ]; then printf "\033[48;5;196;38;5;15m[1] a file already exists with name %s\033[0m\n" "$ans.zip"; return; fi
+    if [ -e "$ans.zip" ]; then printf "\033[37;48;5;88m[1] a file already exists with name %s\033[0m\n" "$ans.zip"; return; fi
     # Zip command ignores directory names
     if zip -rqj "$ans.zip" "$fx"; then
-        printf "\033[48;5;34;38;5;15m[1] archive %s created\033[0m\n" "$ans.zip"
+        printf "\033[37;48;5;58m[1] archive %s created\033[0m\n" "$ans.zip"
     else
-        printf "\033[48;5;196;38;5;15m[1] archive %s could not be created\n" "$ans.zip"
+        printf "\033[37;48;5;88m[1] archive %s could not be created\n" "$ans.zip"
     fi
 }}
 
@@ -313,20 +332,20 @@ cmd vscode %{{
 # Open file in Sublime
 cmd sublime %{{
     if [ -f "$f" ]; then subl "$f"; lf -remote 'send reload'
-    else printf "\033[48;5;196;38;5;15m[1] cannot open a directory with Sublime\033[0m\n"
+    else printf "\033[37;48;5;88m[1] cannot open a directory with Sublime\033[0m\n"
     fi
 }}
 
 # Copy path of the current dir to clipboard
 cmd copydirpath %{{
     print -n "$PWD" | pbcopy
-    printf "\033[48;5;34;38;5;15m[1] %s copied to clipboard\033[0m\n" "$PWD"    
+    printf "\033[37;48;5;58m[1] %s copied to clipboard\033[0m\n" "$PWD"    
 }}
 
 # Copy path of the selected file to clipboard
 cmd copyfilepath %{{
     print -n "$f" | pbcopy
-    printf "\033[48;5;34;38;5;15m[1] %s copied to clipboard\033[0m\n" "$f"    
+    printf "\033[37;48;5;58m[1] %s copied to clipboard\033[0m\n" "$f"    
 }}
 
 # Open Finder in current dir
@@ -401,10 +420,11 @@ map f
 map t
 map w
 
+map sn :set sortby natural; set info
+map sc :set sortby ctime; set reverse; set info ctime
 map ff findfile
 map fd finddir
 map <c-f> findhere
-map J $lf -remote "send $id cd $(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ~/.config/lf/test | fzf)"
 map <c-c> copy
 map p :paste; clear
 map x cut
@@ -429,6 +449,7 @@ map nr tar2
 map chm chmod
 map vsc vscode
 map sbl sublime
+map cph copyhere
 map cfp copyfilepath
 map cdp copydirpath
 map clone clone

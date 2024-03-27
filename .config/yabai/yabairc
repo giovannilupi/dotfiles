@@ -23,7 +23,7 @@ yabai -m config split_ratio 0.5
 # Padding settings
 # -----------------------------------------------------------
 
-yabai -m config top_padding 02
+yabai -m config top_padding 01
 yabai -m config bottom_padding 02
 yabai -m config left_padding 04
 yabai -m config right_padding 04
