@@ -60,6 +60,7 @@ yabai -m config mouse_drop_action swap
 #yabai -m config window_opacity_duration 0.0
 # Force transparency on VSCode
 yabai -m rule --add app="^Code$" opacity=0.96
+yabai -m rule --add app="^Sublime Text$" opacity=0.97
 
 # -----------------------------------------------------------
 # Misc settings
@@ -79,3 +80,4 @@ yabai -m rule --add app="^Logi Options\+$" manage=off
 yabai -m rule --add app="^Keychron Engine$" manage=off
 yabai -m rule --add app="^Discord$" manage=off
 yabai -m rule --add app="^Adobe Photoshop 2020$" manage=off
+yabai -m rule --add app="^Spotify$" manage=off
