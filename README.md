@@ -13,9 +13,11 @@ To provide coherency in visual appeal, I am using the [gruvbox](https://github.c
 ![screenshot](screenshots/screenshot3.png)
 ![screenshot](screenshots/screenshot4.png)
 
-## Recommended Programs
+## Dependencies
 
-Here is a list of the programs that I recommend for use in this setup:
+Here are some of the programs and binaries that I use in this setup.
+
+### Recommended Programs
 
 [`Visual Studio Code`](https://code.visualstudio.com/): main code editor
 
@@ -43,7 +45,7 @@ Here is a list of the programs that I recommend for use in this setup:
 
 [`OmniDiskSweeper`](https://www.omnigroup.com/more): free disk space
 
-## Recommended Binaries
+### Recommended Binaries
 
 [`yabai`](https://github.com/koekeishiya/yabai): tiling window manager
 
@@ -97,4 +99,23 @@ Here is a list of the programs that I recommend for use in this setup:
 
 [`gnumeric`](https://formulae.brew.sh/formula/gnumeric): GNOME Spreadsheet Application
 
+## Instructions
+
+Here are some configuration instructions.
+
+### Shell
+
+I use zsh as my preferred shell. 
+\
+I use [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) as a framework for managing configurations and plugins.
+\
+As theme, I use [Powerlevel10k](https://github.com/romkatv/powerlevel10k).
+\
+I am using three custom plugins, which are not included by default on `Oh My Zsh`:
+
+- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions): fish shell-like autosuggestions
+- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting): fish shell-like syntax highlighting
+- [dirbrowse](https://github.com/giovannilupi/dirbrowse): fast browsing through the directory stack
+
+The rest of the configuration can be found in the `.zshrc` file.
 
