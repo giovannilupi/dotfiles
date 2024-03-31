@@ -103,19 +103,75 @@ Here are some of the programs and binaries that I use in this setup.
 
 Here are some configuration instructions.
 
+### Wallpaper
+
+The wallpaper I use can be found in the `.config` directory. You can choose any other wallpaper. To increase the resoultion of anime-style images, I use the In-Browser version of [waifu2x](https://github.com/nagadomi/waifu2x). To harmonize the chosen image with the gruvbox theme, I use [gruvbox-factory](https://github.com/paulopacitti/gruvbox-factory).
+
+### macOS Settings
+
+Most of my custom settings revolve around tweaking the appearance of the macOS interface and optimizing keyboard shortcuts for efficient navigation. 
+
+To keep my workspace clutter-free, I prefer to keep the dock hidden at all times. This is easily achieved using a script located in the `raycast` directory, allowing me to toggle the visibility of the dock as needed.
+\
+To provide a solid color to the menu bar, I activate the "Reduce transparency" option in System Settings.
+
+To streamline the use of [yabai](https://github.com/koekeishiya/yabai), I've configured a few custom keybindings. Notably, in the "Keyboard shortcuts" section under "Mission Control," I utilize keybindings such as <kbd>^N</kbd> to switch to desktop N. To ensure seamless functionality, it's essential to deactivate the "Automatically rearrange Spaces based on most recent use" option.
+
+
 ### Shell
 
 I use zsh as my preferred shell. 
 \
 I use [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) as a framework for managing configurations and plugins.
 \
-As theme, I use [Powerlevel10k](https://github.com/romkatv/powerlevel10k).
-\
-I am using three custom plugins, which are not included by default on `Oh My Zsh`:
+As theme, I use [Powerlevel10k](https://github.com/romkatv/powerlevel10k). For this theme to work correctly and display icons properly, I use the [MesloLGS NF](https://github.com/romkatv/powerlevel10k/blob/master/font.md) font.
 
+I am using three custom plugins, which are not included by default on `Oh My Zsh`:
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions): fish shell-like autosuggestions
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting): fish shell-like syntax highlighting
 - [dirbrowse](https://github.com/giovannilupi/dirbrowse): fast browsing through the directory stack
 
 The rest of the configuration can be found in the `.zshrc` file.
 
+### iTerm2
+
+For my complete iTerm2 configuration, you can find a copy of my settings in the `iterm2` directory of this repository. For the font, I am using [MesloLGS NF](https://github.com/romkatv/powerlevel10k/blob/master/font.md). To enhance the appearance, I am using [this](https://github.com/herrbischoff/iterm2-gruvbox) gruvbox theme, combined with 5% window transparency. To maximize screen real estate, I've removed the title bar in the settings.
+
+### Visual Studio Code
+
+As editor font, I am using [FiraCode](https://github.com/tonsky/FiraCode) with ligatures enabled. To maintain coherency with my terminal, I use [MesloLGS NF](https://github.com/romkatv/powerlevel10k/blob/master/font.md) as font for the VSCode integrated terminal. Additionally, I've configured a few more settings to enable image display within the integrated terminal. Here are some relevant snippets from my `settings.json` file:
+```
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "terminal.integrated.sendKeybindingsToShell": true,
+    "terminal.integrated.fontSize": 16,
+    "editor.fontSize": 17,
+    "terminal.integrated.gpuAcceleration": "canvas",
+    "terminal.integrated.enableImages": true,
+    "editor.inlayHints.fontFamily": "MesloLGS NF",
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true
+```
+For keybindings, I've only set up one custom binding, which toggles the maximized panel using <kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>m</kbd>. This binding can be added to the `keybindings.json` file:
+```
+    "key": "ctrl+shift+m",
+    "command": "workbench.action.toggleMaximizedPanel",
+```
+To maintain a consistent appearance across my workspace I use [this](https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox) gruvbox dark medium theme, while window transparency is managed through yabai. Some of the other extensions I use in my workflow include: Perl Navigator, ShellCheck, C/C++, Remote - SSH, Remote Explorer, Python, LiveShare, and GitLens.
+
+### Sublime Text
+
+I use Sublime as alternative code editor (mainly for scripting) and for note taking purposes. The `raycast` directory includes a script to open at its last line a note file located at `~/Documents/notes`. For appearance, I am using [this](https://github.com/Briles/gruvbox) gruvbox theme and color scheme. To optimize screen real estate, I've reduced the size of tabs and the status bar using some custom settings (Preferences):
+```
+	"color_scheme": "gruvbox (Dark) (Medium).sublime-color-scheme",
+	"font_size": 18,
+	"theme": "gruvbox.sublime-theme",
+	"gruvbox_tabs_xxs": true,
+	"gruvbox_statusbar_xxs": true,
+```
+Window transparency is managed through yabai.
+
+To disable the periodic license popup, add the following lines to `/etc/hosts`:
+```
+127.0.0.1       www.sublimetext.com
+127.0.0.1       license.sublimehq.com
+```
