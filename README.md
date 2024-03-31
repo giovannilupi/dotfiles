@@ -131,7 +131,7 @@ I am using three custom plugins, which are not included by default on `Oh My Zsh
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting): fish shell-like syntax highlighting
 - [dirbrowse](https://github.com/giovannilupi/dirbrowse): fast browsing through the directory stack
 
-The rest of the configuration can be found in the `.zshrc` file.
+The rest of the configuration can be found in the `.zshrc` file. I also created an empty `.hushlogin` file in the home directory to disable the autoamtic last login message print when opening a new sesssion.
 
 ### iTerm2
 
@@ -175,3 +175,25 @@ To disable the periodic license popup, add the following lines to `/etc/hosts`:
 127.0.0.1       www.sublimetext.com
 127.0.0.1       license.sublimehq.com
 ```
+
+### Firefox
+
+Firefox is my default browser. To enhance privacy and minimize data collection, I disable telemetry and data collection following [this](https://wiki.archlinux.org/title/Firefox/Privacy) and [this](https://github.com/K3V1991/Disable-Firefox-Telemetry-and-Data-Collection) guide. To visually integrate with my setup, I am using [this](https://addons.mozilla.org/en-US/firefox/addon/gruvboxtheme/) gruvbox theme. As browsing add-ons, I am using uBlock Origin and TWP - Translate Web Pages.
+
+### yabai
+
+The configuration file for yabai is included in this repository. To unlock the full range of features, including window transparency, it's essential to partially disable System Integrity Protection, as outlined in the yabai documentation.
+
+### lf
+
+This is one of the binaries I use most frequently. Setting it up is straightforward, as lf automatically detects configuration files located in `.config/lf`. For Linux setups, the `lfrc` config file is largely compatible, although adjustments may be necessary. First, some of the key binds might not be suitable outside of macOS. Second, this file includes some commands specific to macOS, such as `pbcopy`.
+
+To enable file previews, ensure that the `preview` script is executable. The previwer uses chafa in conjunction with the sixel protocol to display images. You can check if you terminal emulator supports the sixel protocol [here](https://www.arewesixelyet.com/). If your terminal emulator does not provide sixel support, you can modify the previewer to use a different protocol, or to dispaly images using the ascii art option.
+
+### fzfscripts
+
+These are a collection of scripts that I have designed and written for convenience, requiring no particular configuration. 
+
+The `crange` function is a useful tool for selecting and outputting a range of lines from a file using the fzf interface. I frequently employ this script to pipe output to tgpt, allowing me to pose questions to an AI chatbot.
+
+The `ffile`, `fdir`, and `fline` functions streamline development tasks by facilitating the quick opening of files in VSCode or changing directories with ease.
