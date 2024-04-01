@@ -104,15 +104,7 @@ alias -g errout="2>&1 >/dev/null"
 
 # Functions
 lfcd () {
-    tmp="$(mktemp)"
-    command lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-    # Avoid registering error exit status
-    return 0
+    cd "$(command lf -print-last-dir "$@")"
 }
 alias lf="lfcd"
 
