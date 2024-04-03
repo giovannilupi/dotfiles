@@ -6,7 +6,7 @@
 # @raycast.mode silent
 
 # Optional parameters:
-# @raycast.icon 🖥️
+# @raycast.icon assets/dock-icon.png
 
 # Documentation:
 # @raycast.description Show / hide dock

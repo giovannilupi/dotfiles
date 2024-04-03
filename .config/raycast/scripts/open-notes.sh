@@ -6,7 +6,7 @@
 # @raycast.mode silent
 
 # Optional parameters:
-# @raycast.icon ✍🏻
+# @raycast.icon assets/sublime-icon.png
 
 # Documentation:
 # @raycast.description Open notes in sublime
