@@ -131,7 +131,7 @@ I am using three custom plugins, which are not included by default on `Oh My Zsh
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting): fish shell-like syntax highlighting
 - [dirbrowse](https://github.com/giovannilupi/dirbrowse): fast browsing through the directory stack
 
-The rest of the configuration can be found in the `.zshrc` file. I also created an empty `.hushlogin` file in the home directory to disable the autoamtic last login message print when opening a new sesssion.
+The rest of the configuration can be found in the `.zshrc` file. I also created an empty `.hushlogin` file in the home directory to disable the automatic last login message print when opening a new sesssion.
 
 ### iTerm2
 

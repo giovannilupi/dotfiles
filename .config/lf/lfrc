@@ -387,9 +387,10 @@ cmd finddir ${{
 }}
 
 # Ask AI a question on the current file
-# Requires the crange function to be configured in the zsh profile
+# Requires fzfscripts
 cmd ask_gpt ${{
-    flines=$(zsh -ic "crange \"$f\"")
+    source "$HOME/.config/fzfscripts.zsh"
+    flines=$(crange "$f")
     if [ -n "$flines" ]; then
         printf "\n\033[1;35m╭─ Bot\n\033[0mAsk the AI a question on this file:\n\n\033[1;94m╭─ You\033[0m\n"
         read -r ans
@@ -427,7 +428,7 @@ map fd finddir
 map <c-f> findhere
 map <c-c> copy
 map p :paste; clear
-map x cut
+map <c-x> cut
 map i invert
 map d clear
 map u unselect
