@@ -119,6 +119,15 @@ tgptf() {
     tgpt -preprompt "$content" -m
 }
 
+# Updater for installation using the installer script
+# Brew installation is not recommended, as it requires regranting permissions at every update
+yabai-update() {
+    yabai --stop-service
+    curl -L https://raw.githubusercontent.com/koekeishiya/yabai/master/scripts/install.sh | sh /dev/stdin
+    echo "$(whoami) ALL=(root) NOPASSWD: sha256:$(shasum -a 256 $(which yabai) | cut -d " " -f 1) $(which yabai) --load-sa" | sudo tee /private/etc/sudoers.d/yabai
+    yabai --start-service
+}
+
 source ~/.config/fzfscripts.zsh
 
 export BAT_THEME=gruvbox-dark

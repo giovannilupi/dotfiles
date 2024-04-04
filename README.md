@@ -182,6 +182,8 @@ Firefox is my default browser. To enhance privacy and minimize data collection, 
 
 ### yabai
 
+I recommend installing the binary using the yabai [installer script](https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)). When using Homebrew, each update causes the binary to be stored at a different path, effectively resetting the permissions. Because the binary is updated frequently, resetting permissions so often is far from ideal. To ease the updates for the script install, I have added a function in the `.zshrc` file.
+
 The configuration file for yabai is included in this repository. To unlock the full range of features, including window transparency, it's essential to partially disable System Integrity Protection, as outlined in the yabai documentation.
 
 ### lf
