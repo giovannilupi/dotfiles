@@ -89,7 +89,7 @@ ffile() {
       --color "hl:-1:underline,hl+:-1:underline:reverse" \
       --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
       --preview '~/.config/lf/preview {} ${FZF_PREVIEW_COLUMNS} ${FZF_PREVIEW_LINES}' \
-      --bind 'enter:execute-silent(code --goto {})+accept'
+      --bind 'enter:execute-silent(code --goto {})+accept' > /dev/null
 }
 
 # Interactively find and cd to a directory
@@ -164,7 +164,7 @@ fline() {
       --delimiter : \
       --preview 'bat --color=always {1} --highlight-line {2}' \
       --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-      --bind 'enter:execute-silent(code --goto {1}:{2})+accept'
+      --bind 'enter:execute-silent(code --goto {1}:{2})+accept' > /dev/null
 }
 
 # Interactively selects a range of lines from a text file and prints all lines in the range
