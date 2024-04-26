@@ -77,6 +77,10 @@ Here are some of the programs and binaries that I use in this setup.
 
 [`fastfetch`](https://github.com/fastfetch-cli/fastfetch): fetch and display system information
 
+[`shellcheck`](https://github.com/koalaman/shellcheck): script static analysis tool
+
+[`checkbashisms`](https://formulae.brew.sh/formula/checkbashisms): check for bashisms in `/bin/sh` scripts 
+
 [`cowsay`](https://formulae.brew.sh/formula/cowsay): cow ASCII art with messages
 
 [`fortune`](https://formulae.brew.sh/formula/fortune): fortune-cookie generator
