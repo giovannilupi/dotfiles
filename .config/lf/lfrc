@@ -443,6 +443,7 @@ map D delete
 map R rename
 map E extract
 map H ask_gpt
+map P $~/.config/lf/preview $f | less -R
 map nd newdir
 map nf newfile
 map wg download
