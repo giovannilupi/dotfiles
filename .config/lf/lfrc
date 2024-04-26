@@ -357,16 +357,23 @@ cmd openfinder %{{
 # Clear the files marked for cut/copy upon quitting
 cmd on-quit clear
 
-# Jump to file or dir with fzf
+# Jump to file or dir in the current directory with fzf
+# Hidden files are shown in the search only if LF is set to show them
 cmd findhere ${{
-    res="$(fd --color=always -d 1 --hidden | fzf +m --ansi -e --reverse --color "hl:-1:underline,hl+:-1:underline:reverse" || return 0)"
+    if [ "$lf_hidden" = "true" ]; then hidden_opt="--hidden"; else hidden_opt=""; fi
+    res="$(fd --color=always -d 1 $hidden_opt | 
+        fzf +m --ansi -e --reverse --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        || return 0)"
     if [ -d "$res" ]; then cmd="cd"; else cmd="select"; fi
 	lf -remote "send $id $cmd \"$res\""
 }}
 
 # Find a file recursively and jump to it
+# Hidden files are shown in the search only if LF is set to show them
+# The search is limited to a depth of 5 levels
 cmd findfile ${{
-    res="$(fd --color=always -d 5 --type=file --fixed-strings | 
+    if [ "$lf_hidden" = "true" ]; then hidden_opt="--hidden"; else hidden_opt=""; fi
+    res="$(fd --color=always -d 5 --type=file --fixed-strings $hidden_opt | 
         fzf +m --ansi -e --reverse \
         --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --preview-window 'right,45%,border-bottom,+{2}+3/3,~3' \
@@ -375,9 +382,11 @@ cmd findfile ${{
 	lf -remote "send $id select \"$res\""
 }}
 
-# Find a file recursively and jump to it
+# Find a directory recursively and jump to it
+# Hidden dirs are shown in the search only if LF is set to show them
 cmd finddir ${{
-    res="$(fd --color=always -d 5 --type=directory --fixed-strings | 
+    if [ "$lf_hidden" = "true" ]; then hidden_opt="--hidden"; else hidden_opt=""; fi
+    res="$(fd --color=always -d 5 --type=directory --fixed-strings $hidden_opt | 
         fzf +m --ansi -e --reverse \
         --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --preview-window 'right,40%,border-bottom,+{2}+3/3,~3' \
