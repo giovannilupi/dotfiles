@@ -16,8 +16,8 @@ set cursorpreviewfmt "\033[7;2m"
 set errorfmt "\033[37;48;5;88m%s\033[0m"
 set drawbox true
 # Shell settings
-set shell zsh
-set shellopts '-euy'
+set shell /bin/dash
+set shellopts '-eu'
 set ifs "\n"
 set filesep "\n"  # default already
 
@@ -36,112 +36,86 @@ set filesep "\n"  # default already
 # use either file extensions and/or mime types here. Below uses an editor for
 # text files and a file opener for the rest.
 cmd open &{{
-    case $(file --mime-type -Lb $f) in
-        text/*) lf -remote "send $id \$$EDITOR \$fx";;
-        *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
+    case $(file --mime-type -Lb "$f") in
+        text/* | inode/x-empty) lf -remote "send $id \$$EDITOR \$fx";;
+        *) for file in $fx; do $OPENER "$file" >/dev/null 2>&1 & done;;
     esac
+    lf -remote 'send unselect'
 }}
 
 # Create new directories
+# If a directory already exists, it will not be overwritten
 cmd newdir %{{
     printf "Enter new directory name(s): "
-    # Store new dir names in array
-    { IFS=' '; read -r -A names; }
-    if [[ -z "${names[1]}" ]]; then printf "\033[37;48;5;88m[1] no directory names provided\033[0m\n"; return; fi
-    # Storage for success and failure
-    successful=()
-    failed=()
-    error_file=$(mktemp)
-    # Create dirs
-    for dir in "${names[@]}"; do
-        if mkdir "$dir" 2>"$error_file"; then 
-            successful+=("$dir")
-        else 
-            err_msg=$(<"$error_file")
-            failed+=("$dir")
+    read -r dirnames
+    if [ -z "$dirnames" ]; then printf "\033[37;48;5;88m[1] no directory name provided\033[0m\n"; return; fi
+    failed_items=""
+    failed_cnt=0
+    # Use eval to split $dirnames into words, respecting escaped spaces
+    # This introduces a security risk, but there is no other easy way to split a string into words in POSIX due to lack of arrays
+    # As an alternative, you may choose to set IFS=' ' and not handle escaped spaces
+    eval "set -- $dirnames"
+    for dirname in "$@"; do
+        if ! mkdir -p "$dirname" >/dev/null 2>&1; then
+            failed_cnt=$((failed_cnt+1))
+            if [ -z "$failed_items" ]; then
+                failed_items=$dirname
+            else
+                failed_items="$failed_items, $dirname"
+            fi
         fi
-    done
-    rm -f "$error_file"
-    # Print outcome
-    if [[ ${#failed[@]} -eq 0 ]]; then
-        [[ ${#successful[@]} -gt 1 ]] && \
-            printf "\033[37;48;5;58m[%d] all directories created\033[0m\n" "${#successful[@]}" || \
-            printf "\033[37;48;5;58m[1] directory %s created\033[0m\n" "${successful[1]}"
-    elif [[ ${#failed[@]} -eq 1 ]]; then
-        printf "\033[37;48;5;88m[1] directory %s could not be created - %s\033[0m\n" "${failed[1]}" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+    done          
+    if [ $failed_cnt = 0 ]; then
+        printf "\033[32mCreated all directories\033[0m\n"
     else
-        IFS=',' result="${failed[*]//,/, }"
-        printf "\033[37;48;5;88m[%d] some directories could not be created - %s\033[0m\n" "${#failed[@]}" "$result"
+        printf "\033[37;48;5;88m[%d] some directories could not be created - %s\033[0m\n" "$failed_cnt" "$failed_items"
     fi
 }}
 
 # Create new files
+# If a file already exists, it will not be overwritten
 cmd newfile %{{
     printf "Enter new file name(s): "
-    # Store new file names in array
-    { IFS=' '; read -r -A names; }
-    if [[ -z "${names[1]}" ]]; then printf "\033[37;48;5;88m[1] no file names provided\033[0m\n"; return; fi
-    # Storage for success and failure
-    successful=()
-    failed=()
-    error_file=$(mktemp)
-    # Create files
-    for nf in "${names[@]}"; do
-        if [ -e $nf ]; then
-            err_msg="already exists"
-            failed+=("$nf")
-        elif touch "$nf" 2>"$error_file"; then 
-            successful+=("$nf")
-        else
-            err_msg=$(<"$error_file")
-            failed+=("$nf")
+    read -r files
+    if [ -z "$files" ]; then printf "\033[37;48;5;88m[1] no file name provided\033[0m\n"; return; fi
+    failed_items=""
+    failed_cnt=0
+    # Use eval to split $files into words, respecting escaped spaces
+    # This introduces a security risk, but there is no other easy way to split a string into words in POSIX due to lack of arrays
+    # As an alternative, you may choose to set IFS=' ' and not handle escaped spaces
+    eval "set -- $files"
+    for file in "$@"; do
+        if ! touch "$file" >/dev/null 2>&1; then
+            failed_cnt=$((failed_cnt+1))
+            if [ -z "$failed_items" ]; then
+                failed_items=$file
+            else
+                failed_items="$failed_items, $file"
+            fi
         fi
-    done
-    rm -f "$error_file"
-    # Print outcome
-    if [[ ${#failed[@]} -eq 0 ]]; then
-        [[ ${#successful[@]} -gt 1 ]] && \
-            printf "\033[37;48;5;58m[%d] all files created\033[0m\n" "${#successful[@]}" || \
-            printf "\033[37;48;5;58m[1] file %s created\033[0m\n" "${successful[1]}"
-    elif [[ ${#failed[@]} -eq 1 ]]; then
-        printf "\033[37;48;5;88m[1] file %s could not be created - %s\033[0m\n" "${failed[1]}" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+    done          
+    if [ $failed_cnt = 0 ]; then
+        printf "\033[32mCreated all files\033[0m\n"
     else
-        IFS=',' result="${failed[*]//,/, }"
-        printf "\033[37;48;5;88m[%d] some files could not be created - %s\033[0m\n" "${#failed[@]}" "$result"
+        printf "\033[37;48;5;88m[%d] some files could not be created - %s\033[0m\n" "$failed_cnt" "$failed_items"
     fi
 }}
 
 # Download files with wget
 cmd download %{{
     printf "Enter download link(s): "
-    # Store new file names in array
-    { IFS=' '; read -r -A links; }
-    if [[ -z "${links[1]}" ]]; then printf "\033[37;48;5;88m[1] no links provided\033[0m\n"; return; fi
+    read -r links
+    if [ -z "$links" ]; then printf "\033[37;48;5;88m[1] no links provided\033[0m\n"; return; fi
     printf "Downloading...\n"
-    # Storage for success and failure
-    successful=()
-    failed=()
-    error_file=$(mktemp)
-    # Create dirs
-    for l in "${links[@]}"; do
-        if wget "$l" 2>"$error_file"; then 
-            successful+=("$l")
-        else
-            err_msg=$(<"$error_file")
-            failed+=("$l")
-        fi
+    failed_cnt=0
+    IFS=' '
+    for link in $links; do
+        if ! wget "$link" >/dev/null 2>&1; then failed_cnt=$((failed_cnt+1)); fi
     done
-    rm -f "$error_file"
-    # Print outcome
-    if [[ ${#failed[@]} -eq 0 ]]; then
-        [[ ${#successful[@]} -gt 1 ]] && \
-            printf "\033[37;48;5;58m[%d] all files downloaded\033[0m\n" "${#successful[@]}" || \
-            printf "\033[37;48;5;58m[1] file %s downloaded\033[0m\n" "$(basename "${successful[1]}")"
-    elif [[ ${#failed[@]} -eq 1 ]]; then
-        printf "\033[37;48;5;88m[1] file %s could not be downloaded - %s\033[0m\n" "$(basename "${successful[1]}")" "$(echo "$err_msg" | tail -n 1 | awk -F ': ' '{print tolower($NF)}')"
+    if [ $failed_cnt = 0 ]; then
+        printf "\033[32mDownloaded all files\033[0m\n"
     else
-        result=$(IFS=','; echo "${failed[@]}" | xargs -n1 basename | paste -sd "," - | sed 's/,/, /g')
-        printf "\033[37;48;5;88m[%d] some files could not be downloaded - %s\033[0m\n" "${#failed[@]}" "$result"
+        printf "\033[37;48;5;88m[%d] some items could not be downloaded\033[0m\n" "$failed_cnt"
     fi
 }}
 
@@ -149,65 +123,68 @@ cmd download %{{
 cmd copyhere %{{
     printf "Enter file(s) to copy: "
     read -r files
-    if [[ -z "$files" ]]; then printf "\033[37;48;5;88m[1] no file name provided\033[0m\n"; return; fi
+    if [ -z "$files" ]; then printf "\033[37;48;5;88m[1] no file name provided\033[0m\n"; return; fi
     printf "Copying...\n"
-    cp_command=$(echo "$files" | awk '{printf "cp -n %s .", $0}')
-    error_file=$(mktemp)
-    if eval "$cp_command 2>$error_file"; then
-        printf "\033[37;48;5;58m[1] all files copied\033[0m\n"
+    failed_items=""
+    failed_cnt=0
+    # Use eval to split $files into words, respecting escaped spaces
+    # This introduces a security risk, but there is no other easy way to split a string into words in POSIX due to lack of arrays
+    # As an alternative, you may choose to set IFS=' ' and not handle escaped spaces
+    eval "set -- $files"
+    for file in "$@"; do
+        if ! cp -n -R "$file" . >/dev/null 2>&1; then
+            failed_cnt=$((failed_cnt+1))
+            if [ -z "$failed_items" ]; then
+                failed_items="$(basename "$file")"
+            else
+                failed_items="$failed_items, $(basename "$file")"
+            fi
+        fi
+    done          
+    if [ $failed_cnt = 0 ]; then
+        printf "\033[32mCopied all items\033[0m\n"
     else
-        err=$(awk -F ': ' '{print tolower($NF)}' "$error_file")
-        if [ -z "$err" ]; then err="file exists"; fi
-        printf "\033[37;48;5;88m[1] failed to copy some files - %s\033[0m\n" "$err"
+        printf "\033[37;48;5;88m[%d] some items could not be copied - %s\033[0m\n" "$failed_cnt" "$failed_items"
     fi
-    rm -f "$error_file"
 }}
 
-# Git clone
+# Clone git repository from given link to current directory
 cmd clone %{{
     printf "Enter link to clone: "
-    read -r ans
-    if [ -z "$ans" ]; then
-        printf "\033[37;48;5;88m[1] no link provided\033[0m\n"
-        return
-    fi
+    read ans
+    if [ -z "$ans" ]; then printf "\033[37;48;5;88m[1] no link provided\033[0m\n"; return; fi
     printf "Cloning repository...\n"
-    error_file=$(mktemp)
-    if git clone "$ans" 2>"$error_file"; then
-        printf "\033[37;48;5;58m[1] repository cloned\033[0m\n"
+    if ! error_msg="$(git clone "$ans" 2>&1)"; then
+        printf "\033[37;48;5;88m[1] failed to clone repository - %s\033[0m\n" "$(echo "$error_msg" | awk -F ': ' '{print tolower($NF)}')"
     else
-        printf "\033[37;48;5;88m[1] failed to clone repository - %s\033[0m\n" "$(awk -F ': ' '{print tolower($NF)}' "$error_file")"
+        printf "\033[32mRepository cloned\033[0m\n"
     fi
-    rm -f "$error_file"
 }}
 
 # Trash command with confirmation
 cmd trash %{{
     printf "Move all selected items to trash? [y/n]: "
-    read -r ans
+    read ans
     case "$ans" in
         [Yy]*)
             printf "Moving files to trash...\n"
-            successful=()
-            failed=()
-            error_file=$(mktemp)
-            for f in $fx; do
-                if gio trash "$f" 2>"$error_file"; then 
-                    successful+=("$f")
-                else
-                    err_msg=$(<"$error_file")
-                    failed+=("$f")
+            failed_items=""
+            failed_cnt=0
+            for file in $fx; do
+                if ! gio trash "$file" >/dev/null 2>&1; then
+                    failed_cnt=$((failed_cnt+1))
+                    if [ -z "$failed_items" ]; then
+                        failed_items="$(basename "$file")"
+                    else
+                        failed_items="$failed_items, $(basename "$file")"
+                    fi
                 fi
             done
-            rm -f "$error_file"
-            if [[ ${#failed[@]} -eq 0 ]]; then
-                printf "\033[37;48;5;58m[%d] all selected items moved to trash\033[0m\n" "${#successful[@]}"
-            elif [[ ${#failed[@]} -eq 1 ]]; then
-                printf "\033[37;48;5;88m[1] %s - %s\n" "$(basename "${failed[1]}")" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+            lf -remote 'send unselect'
+            if [ $failed_cnt = 0 ]; then
+               printf "\033[32mMoved all items to trash\033[0m\n"
             else
-                for i in {1..$#failed}; do failed[$i]="$(basename "${failed[$i]}")"; done
-                IFS=',' result="${failed[*]//,/, }"
-                printf "\033[37;48;5;88m[%d] some items could not be trashed - %s\033[0m\n" "${#failed[@]}" "$result"
+                printf "\033[37;48;5;88m[%d] some items could not be trashed - %s\033[0m\n" "$failed_cnt" "$failed_items"
             fi
             ;;
         [Nn]*) printf "\033[37;48;5;88m[1] operation aborted\033[0m\n" ;;
@@ -218,30 +195,27 @@ cmd trash %{{
 # Delete command with confirmation
 cmd delete %{{
     printf "Delete all selected items? [y/n]: "
-    read -r ans
+    read ans
     case "$ans" in
         [Yy]*)
             printf "Deleting files...\n"
-            successful=()
-            failed=()
-            error_file=$(mktemp)
-            for f in $fx; do
-                if rm -rf "$f" 2>"$error_file"; then 
-                    successful+=("$f")
-                else
-                    err_msg=$(<"$error_file")
-                    failed+=("$f")
+            failed_items=""
+            failed_cnt=0
+            for file in $fx; do
+                if ! rm -rf "$file" >/dev/null 2>&1; then
+                    failed_cnt=$((failed_cnt+1))
+                    if [ -z "$failed_items" ]; then
+                        failed_items="$(basename "$file")"
+                    else
+                        failed_items="$failed_items, $(basename "$file")"
+                    fi
                 fi
             done
-            rm -f "$error_file"
-            if [[ ${#failed[@]} -eq 0 ]]; then
-                printf "\033[37;48;5;58m[%d] all selected items deleted\033[0m\n" "${#successful[@]}"
-            elif [[ ${#failed[@]} -eq 1 ]]; then
-                printf "\033[37;48;5;88m[1] failed to delete %s - %s\033[0m\n" "$(basename "${failed[1]}")" "$(echo "$err_msg" | awk -F ': ' '{print tolower($NF)}')"
+            lf -remote 'send unselect'
+            if [ $failed_cnt = 0 ]; then
+               printf "\033[32mDeleted all selected items\033[0m\n"
             else
-                for i in {1..$#failed}; do failed[$i]="$(basename "${failed[$i]}")"; done
-                IFS=',' result="${failed[*]//,/, }"
-                printf "\033[37;48;5;88m[%d] some items could not be deleted - %s\033[0m\n" "${#failed[@]}" "$result"
+                printf "\033[37;48;5;88m[%d] some items could not be deleted - %s\033[0m\n" "$failed_cnt" "$failed_items"
             fi
             ;;
         [Nn]*) printf "\033[37;48;5;88m[1] operation aborted\033[0m\n" ;;
@@ -252,13 +226,13 @@ cmd delete %{{
 # Rename file or directory
 cmd rename %{{
     printf "Enter new name: "
-    read -r ans
+    read ans
     if [ -z "$ans" ]; then
         printf "\033[37;48;5;88m[1] new name cannot be empty\033[0m\n"
         return
     fi
     # Check if the new filename contains a directory separator
-    if [[ "$ans" == *"/"* ]]; then
+    if echo "$ans" | grep -q "/"; then
         printf "\033[37;48;5;88m[1] new name contains a directory separator\033[0m\n"
         return
     fi
@@ -271,19 +245,16 @@ cmd rename %{{
     fi
     # Check $f type
     if [ -L "$f" ]; then ftype="symlink"; elif [ -d "$f" ]; then ftype="directory"; else ftype="file"; fi
-    error_file=$(mktemp)
-    if mv -f "$f" "$ans" 2>"$error_file"; then
-        printf "\033[37;48;5;58m[1] $ftype %s renamed to %s\033[0m\n" "$(basename "$f")" "$ans"
+    if ! error_msg="$(mv -f "$f" "$ans" 2>&1)"; then
+        printf "\033[37;48;5;88m[1] $ftype %s could not be renamed - %s\033[0m\n" "$(basename "$f")" "$(echo "$error_msg" | awk -F ': ' '{print tolower($NF)}')"
     else
-        printf "\033[37;48;5;88m[1] $ftype %s could not be renamed - %s\033[0m\n" "$(basename "$f")" "$(awk -F ': ' '{print tolower($NF)}' "$error_file")"
+        printf "\033[32mRenamed $ftype %s to %s\033[0m\n" "$(basename "$f")" "$ans"
     fi
-    rm -f "$error_file"
 }}
 
 # Extract the current file with the right command
 # All commands skip existing files when extracting
 cmd extract %{{
-    set -f
     ecmd=""
     case "$f" in
         *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) ecmd="tar xjvfk '$f'";;
@@ -292,60 +263,94 @@ cmd extract %{{
         *.zip) ecmd="unzip -n '$f'";;
         *.rar) ecmd="unrar x -inul -o- '$f'";;
         *.7z) ecmd="7z x -aos '$f'";;
-        *) printf "\033[37;48;5;88m[1] Unrecognized archive type\033[0m\n"; return 1;;
+        *) printf "\033[37;48;5;88m[1] unrecognized archive type\033[0m\n"; return 1;;
     esac
     if eval "$ecmd > /dev/null 2>&1"; then
-        printf "\033[37;48;5;58m[1] Archive %s extracted %s\033[0m\n" "$(basename "$f")"
+        printf "\033[32mArchive %s extracted\033[0m\n" "$(basename "$f")"
     else
-        printf "\033[37;48;5;88m[1] Could not extract archive %s"
+        printf "\033[37;48;5;88m[1] could not extract archive %s\033[0m\n" "$(basename "$f")"
     fi
 }}
 
-# compress current file or selected files with zip
+# Compress selected files with zip
 cmd zip %{{
     printf "Enter new archive name: "
-    read -r ans
+    read ans
     if [ -z "$ans" ]; then printf "\033[37;48;5;88m[1] new name cannot be empty\033[0m\n"; return; fi
     ans="${ans%.zip}"
     # Check if a file with the same name already exists
     if [ -e "$ans.zip" ]; then printf "\033[37;48;5;88m[1] a file already exists with name %s\033[0m\n" "$ans.zip"; return; fi
     # Zip command ignores directory names
-    if zip -rqj "$ans.zip" "$fx"; then
-        printf "\033[37;48;5;58m[1] archive %s created\033[0m\n" "$ans.zip"
+    if zip -rqj "$ans.zip" $fx >/dev/null 2>&1; then
+        printf "\033[32mArchive %s created\033[0m\n" "$ans.zip"
     else
         printf "\033[37;48;5;88m[1] archive %s could not be created\n" "$ans.zip"
     fi
+    lf -remote 'send unselect'
 }}
 
 # Make selected files executable
 cmd chmod %{{
-    for f in "$fx"; do chmod a+x $f; done
-    lf -remote 'send reload'
+    success=false
+    failed_items=""
+    failed_cnt=0
+    for file in $fx; do
+        if ! chmod a+x "$file" >/dev/null 2>&1; then
+            failed_cnt=$((failed_cnt+1))
+            if [ -z "$failed_items" ]; then
+                failed_items="$(basename "$file")"
+            else
+                failed_items="$failed_items, $(basename "$file")"
+            fi
+        else
+            success=true
+        fi
+    done
+    lf -remote 'send unselect'
+    if [ $failed_cnt = 0 ]; then
+        lf -remote 'send reload'
+        printf "\033[32mFiles made executable\033[0m\n"
+    else
+        if [ $success = true ]; then lf -remote 'send reload'; fi
+        printf "\033[37;48;5;88m[%d] error making files executable - %s\033[0m\n" "$failed_cnt" "$failed_items"
+    fi
 }}
 
 # Open file or project in VSCode
 cmd vscode %{{
-    code "$f"
+    code $fx
+    lf -remote 'send unselect'
     lf -remote 'send reload'
+    printf "\033[32mOpened files in VSCode\033[0m\n"
 }}
 
-# Open file in Sublime
+# Open files in Sublime
+# Directories cannot be opened in Sublime
 cmd sublime %{{
-    if [ -f "$f" ]; then subl "$f"; lf -remote 'send reload'
-    else printf "\033[37;48;5;88m[1] cannot open a directory with Sublime\033[0m\n"
+    filebool=false
+    dircnt=0
+    for file in $fx; do
+        if [ -f "$file" ]; then filebool=true; subl "$file"; else dircnt=$((dircnt+1)); fi
+    done
+    lf -remote 'send unselect'
+    if [ "$filebool" = false ]; then
+        printf "\033[37;48;5;88m[%d] cannot open directories with Sublime\033[0m\n" "$dircnt"
+    else
+        lf -remote 'send reload'
+        printf "\033[32mOpened files in Sublime\033[0m\n"
     fi
 }}
 
 # Copy path of the current dir to clipboard
 cmd copydirpath %{{
-    print -n "$PWD" | pbcopy
-    printf "\033[37;48;5;58m[1] %s copied to clipboard\033[0m\n" "$PWD"    
+    printf "$PWD" | pbcopy
+    printf "\033[32mCopied %s to clipboard\033[0m\n" "$PWD"
 }}
 
 # Copy path of the selected file to clipboard
 cmd copyfilepath %{{
-    print -n "$f" | pbcopy
-    printf "\033[37;48;5;58m[1] %s copied to clipboard\033[0m\n" "$f"    
+    printf "$f" | pbcopy
+    printf "\033[32mCopied %s to clipboard\033[0m\n" "$f"
 }}
 
 # Open Finder in current dir

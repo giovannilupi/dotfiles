@@ -89,6 +89,8 @@ Here are some of the programs and binaries that I use in this setup.
 
 [`gruvbox-factory`](https://github.com/paulopacitti/gruvbox-factory): manufacture a gruvbox themed wallpaper
 
+[`glib`](https://formulae.brew.sh/formula/glib): low-level C library
+
 [`xz`](https://formulae.brew.sh/formula/xz): data compression
 
 [`unrar`](https://formulae.brew.sh/cask/rar): data compression
@@ -160,7 +162,7 @@ For keybindings, I've only set up one custom binding, which toggles the maximize
     "key": "ctrl+shift+m",
     "command": "workbench.action.toggleMaximizedPanel",
 ```
-To maintain a consistent appearance across my workspace I use [this](https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox) gruvbox dark medium theme, while window transparency is managed through yabai. Some of the other extensions I use in my workflow include: Perl Navigator, ShellCheck, C/C++, Remote - SSH, Remote Explorer, Python, LiveShare, and GitLens.
+To maintain a consistent appearance across my workspace I use [this](https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox) gruvbox dark medium theme, while window transparency is managed through yabai. Some of the other extensions I use in my workflow include: Phind.com, Perl Navigator, ShellCheck, C/C++, Remote - SSH, Remote Explorer, Python, LiveShare, and GitLens.
 
 ### Sublime Text
 
@@ -192,7 +194,9 @@ The configuration file for yabai is included in this repository. To unlock the f
 
 ### lf
 
-This is one of the binaries I use most frequently. Setting it up is straightforward, as lf automatically detects configuration files located in `.config/lf`. For Linux setups, the `lfrc` config file is largely compatible, although adjustments may be necessary. First, some of the key binds might not be suitable outside of macOS. Second, this file includes some commands specific to macOS, such as `pbcopy`.
+This is one of the binaries I use most frequently. Setting it up is straightforward, as lf automatically detects configuration files located in `.config/lf`. For Linux setups, the `lfrc` config file is largely compatible, although a few adjustments may be necessary. First, some of the key binds might not be ideal outside of macOS. Second, this file includes some commands specific to macOS, such as `pbcopy`.
+
+All scripts included in `lfrc` and `preview` use POSIX syntax, maximizing compatibility across different Unix-like systems. To optimize performance, I recommend using a minimal POSIX shell, such as [`dash`](http://gondor.apana.org.au/~herbert/dash/). While macOS comes with dash preinstalled, `sh` is symlinked to `bash` by default. On my system, I prefer not to change this, as I do not exclude the possibility of some OS scripts to rely on bash-specific syntax. Therefore, I instead trigger dash using the shebang `#!/bin/dash`. You may need to change the lfrc `set shell` directive and the preview script shebang according to your preferred shell. Optimizing performance is crucial for the preview script, as it is invoked each time a file is selected. Because lf spawns a new shell at every command, reducing the startup time can also be beneficial in lfrc.
 
 To enable file previews, ensure that the `preview` script is executable. The previwer uses chafa in conjunction with the sixel protocol to display images. You can check if you terminal emulator supports the sixel protocol [here](https://www.arewesixelyet.com/). If your terminal emulator does not provide sixel support, you can modify the previewer to use a different protocol, or to dispaly images using the ascii art option.
 
