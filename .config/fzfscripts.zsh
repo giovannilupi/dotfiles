@@ -1,5 +1,3 @@
-#!/bin/zsh
-
 # -----------------------------------------------------------
 # Default key binds
 # -----------------------------------------------------------
@@ -12,9 +10,13 @@ export FZF_DEFAULT_OPTS='--bind "ctrl-d:half-page-down,ctrl-u:half-page-up"'
 # -----------------------------------------------------------
  
 declare -A helper_map
-helper_map[crange]="Interactively select and print a range of lines from a file.
-Use Tab to select a line in the fzf previewer, use Enter to confirm the selection.\n
-\033[1m\033[4mUsage:\033[0m crange FILE"
+
+helper_crange() {
+  printf "%s\n" "Interactively select and print a range of lines from a file."
+  printf "%s\n\n" "Use Tab to select a line in the fzf previewer, use Enter to confirm the selection."
+  printf "\033[1m\033[4m%s\033[0m %s\n" "Usage:" "crange FILE"
+}
+
 helper_map[fline]="Interactively search lines from files.
 Use Enter in the fzf previewer to select a file and open it at the highlighted line in VSCode.\n
 \033[1m\033[4mUsage:\033[0m fline [OPTIONS] [PATTERN] [DIRECTORY]\n
@@ -170,14 +172,13 @@ fline() {
 # Interactively selects a range of lines from a text file and prints all lines in the range
 crange() {
   # Print help message
-  for arg in "$@"; do if [[ "$arg" == "-h" || "$arg" == "--help" ]]; then echo "${helper_map[crange]}"; return; fi; done
+  for arg in "$@"; do if [ "$arg" = "-h" ] || [ "$arg" = "--help" ]; then helper_crange; return; fi; done
   # Select lines
-  local sr
   if sr=$(bat --color=always -n "$1"); then
-    if [[ -z "$sr" ]]; then return; fi
+    if [ -z "$sr" ]; then return; fi
     sr=$(printf "%s" "$sr" | fzf --ansi -m -e --reverse | awk '{print $1}' | sort -n)
-    local minl=$(echo "$sr" | head -n 1)
-    local maxl=$(echo "$sr" | tail -n 1)
+    minl=$(printf "%s" "$sr" | head -n 1)
+    maxl=$(printf "%s" "$sr" | tail -n 1)
     if [ -z "$minl" ] || [ -z "$maxl" ]; then return; fi
     sed -n "${minl},${maxl}p" "$1"  
   fi
