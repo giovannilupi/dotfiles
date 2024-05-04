@@ -33,7 +33,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -128,14 +128,14 @@ yabai-update() {
     yabai --start-service
 }
 
-source ~/.config/fzfscripts.zsh
-
 export BAT_THEME=gruvbox-dark
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[ -f ~/.config/fzfscripts.sh ] && source ~/.config/fzfscripts.sh
 
 # Forgit configuration
 # Homebrew installation, for Linux install as ohmyzsh plugin instead
@@ -153,4 +153,12 @@ export FORGIT_BRANCH_DELETE_FZF_OPTS=""
 
 [ -f /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh ] && source /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh
 
+# Perl configuration
 export PATH="$PATH:~/local/bin"
+PATH="~/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=~b/perl5"; export PERL_MM_OPT;
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8

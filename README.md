@@ -202,8 +202,22 @@ To enable file previews, ensure that the `preview` script is executable. The pre
 
 ### fzfscripts
 
-These are a collection of scripts that I have designed and written for convenience, requiring no particular configuration. 
+These are a collection of scripts that I have designed and written for convenience in my daily workflow. They are all written in POSIX sh, and are designed to be used with fzf.
 
-The `crange` function is a useful tool for selecting and outputting a range of lines from a file using the fzf interface. I frequently employ this script to pipe output to tgpt, allowing me to pose questions to an AI chatbot.
+The `crange` function is a useful tool for selecting and outputting a range of lines from a file using the fzf interface. I frequently employ this script to pipe output to tgpt, allowing me to pose questions to an AI chatbot regarding the contents of a text file.
 
-The `ffile`, `fdir`, and `fline` functions streamline development tasks by facilitating the quick opening of files in VSCode or changing directories with ease.
+The `fdir` function allows you to quickly navigate to a directory using fzf. It is especially useful when working with large projects, where navigating to a subdirectory requires multiple levels of `cd`.
+
+The `ffile` function allows you to quickly find a file with fzf and open it in VSCode. To diplay file previews, this function relies on the same `preview` script used in lf.
+
+Similarly, the `fline` function allows you to search for a string inside your project using fzf and open the file containing the match in VSCode.
+
+<details>
+  <summary>Screenshots</summary>
+  
+  ![screenshot](screenshots/crange.png)
+  ![screenshot](screenshots/fdir.png)
+  ![screenshot](screenshots/ffile.png)
+  ![screenshot](screenshots/fline.png)
+  
+</details>

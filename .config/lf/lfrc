@@ -403,7 +403,7 @@ cmd finddir ${{
 # Ask AI a question on the current file
 # Requires fzfscripts
 cmd ask_gpt ${{
-    . "$HOME/.config/fzfscripts.zsh"
+    . "$HOME/.config/fzfscripts.sh"
     flines=$(crange "$f")
     if [ -n "$flines" ]; then
         printf "\n\033[1;35m╭─ Bot\n\033[0mAsk the AI a question on this file:\n\n\033[1;94m╭─ You\033[0m\n"
