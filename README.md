@@ -79,7 +79,7 @@ Here are some of the programs and binaries that I use in this setup.
 
 [`shellcheck`](https://github.com/koalaman/shellcheck): script static analysis tool
 
-[`checkbashisms`](https://formulae.brew.sh/formula/checkbashisms): check for bashisms in `/bin/sh` scripts 
+[`checkbashisms`](https://formulae.brew.sh/formula/checkbashisms): check for bashisms in `/bin/sh` scripts
 
 [`cowsay`](https://formulae.brew.sh/formula/cowsay): cow ASCII art with messages
 
@@ -115,7 +115,7 @@ The wallpaper I use can be found in the `.config` directory. You can choose any 
 
 ### macOS Settings
 
-Most of my custom settings revolve around tweaking the appearance of the macOS interface and optimizing keyboard shortcuts for efficient navigation. 
+Most of my custom settings revolve around tweaking the appearance of the macOS interface and optimizing keyboard shortcuts for efficient navigation.
 
 To keep my workspace clutter-free, I prefer to keep the dock hidden at all times. This is easily achieved using a script located in the `raycast` directory, allowing me to toggle the visibility of the dock as needed.
 \
@@ -126,7 +126,7 @@ To streamline the use of [yabai](https://github.com/koekeishiya/yabai), I've con
 
 ### Shell
 
-I use zsh as my preferred shell. 
+I use zsh as my preferred shell.
 \
 I use [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) as a framework for managing configurations and plugins.
 \
@@ -194,9 +194,11 @@ The configuration file for yabai is included in this repository. To unlock the f
 
 ### lf
 
-This is one of the binaries I use most frequently. Setting it up is straightforward, as lf automatically detects configuration files located in `.config/lf`. For Linux setups, the `lfrc` config file is largely compatible, although a few adjustments may be necessary. First, some of the key binds might not be ideal outside of macOS. Second, this file includes some commands specific to macOS, such as `pbcopy`.
+This is one of the binaries I use most frequently. Setting it up is straightforward, as lf automatically detects configuration files located in `.config/lf`. Due to bugs in previous versions, lf r32 or higher is required. For Linux setups, the `lfrc` config file is largely compatible, although a few adjustments may be necessary. First, some of the key binds might not be ideal outside of macOS. Second, this file includes some commands specific to macOS, such as `pbcopy`.
 
-All scripts included in `lfrc` and `preview` use POSIX syntax, maximizing compatibility across different Unix-like systems. To optimize performance, I recommend using a minimal POSIX shell, such as [`dash`](http://gondor.apana.org.au/~herbert/dash/). While macOS comes with dash preinstalled, `sh` is symlinked to `bash` by default. On my system, I prefer not to change this, as I do not exclude the possibility of some OS scripts to rely on bash-specific syntax. Therefore, I instead trigger dash using the shebang `#!/bin/dash`. You may need to change the lfrc `set shell` directive and the preview script shebang according to your preferred shell. Optimizing performance is crucial for the preview script, as it is invoked each time a file is selected. Because lf spawns a new shell at every command, reducing the startup time can also be beneficial in lfrc.
+Most scripts included in `lfrc` and `preview` use POSIX syntax, maximizing compatibility across different Unix-like systems. To optimize performance, I recommend using a minimal POSIX shell, such as [`dash`](http://gondor.apana.org.au/~herbert/dash/). While macOS comes with dash preinstalled, `sh` is symlinked to `bash` by default. On my system, I prefer not to change this, as I do not exclude the possibility of some OS scripts to rely on bash-specific syntax. Therefore, I instead trigger dash using the shebang `#!/bin/dash`. You may need to change the lfrc `set shell` directive and the preview script shebang according to your preferred shell. Optimizing performance is crucial for the preview script, as it is invoked each time a file is selected. Because lf spawns a new shell at every command, reducing the startup time can also be beneficial in lfrc.
+
+Notice that two functions in `lfrc`, namely `copyhere` and `movehere`, are not strictly POSIX compliant. Both functions use the `-n` option to avoid overriding files, which is a GNU extension. This is not a concern for me, as these functions are mainly designed to levarage the drag and drop features of iTerm2, and I do not expect much use for them on other systems.
 
 To enable file previews, ensure that the `preview` script is executable. The previwer uses chafa in conjunction with the sixel protocol to display images. You can check if you terminal emulator supports the sixel protocol [here](https://www.arewesixelyet.com/). If your terminal emulator does not provide sixel support, you can modify the previewer to use a different protocol, or to dispaly images using the ascii art option.
 
@@ -214,10 +216,10 @@ Similarly, the `fline` function allows you to search for a string inside your pr
 
 <details>
   <summary>Screenshots</summary>
-  
+
   ![screenshot](screenshots/crange.png)
   ![screenshot](screenshots/fdir.png)
   ![screenshot](screenshots/ffile.png)
   ![screenshot](screenshots/fline.png)
-  
+
 </details>

@@ -64,7 +64,7 @@ cmd newdir %{{
                 failed_items="$failed_items, $dirname"
             fi
         fi
-    done          
+    done
     if [ $failed_cnt = 0 ]; then
         printf "\033[32mCreated all directories\033[0m\n"
     else
@@ -93,7 +93,7 @@ cmd newfile %{{
                 failed_items="$failed_items, $file"
             fi
         fi
-    done          
+    done
     if [ $failed_cnt = 0 ]; then
         printf "\033[32mCreated all files\033[0m\n"
     else
@@ -140,11 +140,41 @@ cmd copyhere %{{
                 failed_items="$failed_items, $(basename "$file")"
             fi
         fi
-    done          
+    done
     if [ $failed_cnt = 0 ]; then
         printf "\033[32mCopied all items\033[0m\n"
     else
         printf "\033[37;48;5;88m[%d] some items could not be copied - %s\033[0m\n" "$failed_cnt" "$failed_items"
+    fi
+}}
+
+# Moves the specified files in the current directory, does not overwrite existing files
+# Notice that, unlike coopyhere, this does not display an error if the destination already exists
+cmd movehere %{{
+    printf "Enter file(s) to move: "
+    read -r files
+    if [ -z "$files" ]; then printf "\033[37;48;5;88m[1] no file name provided\033[0m\n"; return; fi
+    printf "Moving...\n"
+    failed_items=""
+    failed_cnt=0
+    # Use eval to split $files into words, respecting escaped spaces
+    # This introduces a security risk, but there is no other easy way to split a string into words in POSIX due to lack of arrays
+    # As an alternative, you may choose to set IFS=' ' and not handle escaped spaces
+    eval "set -- $files"
+    for file in "$@"; do
+        if ! mv -n "$file" . >/dev/null 2>&1; then
+            failed_cnt=$((failed_cnt+1))
+            if [ -z "$failed_items" ]; then
+                failed_items="$(basename "$file")"
+            else
+                failed_items="$failed_items, $(basename "$file")"
+            fi
+        fi
+    done
+    if [ $failed_cnt = 0 ]; then
+        printf "\033[32mMoved all items\033[0m\n"
+    else
+        printf "\033[37;48;5;88m[%d] some items could not be moved - %s\033[0m\n" "$failed_cnt" "$failed_items"
     fi
 }}
 
@@ -366,7 +396,7 @@ cmd on-quit clear
 # Hidden files are shown in the search only if LF is set to show them
 cmd findhere ${{
     if [ "$lf_hidden" = "true" ]; then hidden_opt="--hidden"; else hidden_opt=""; fi
-    res="$(fd --color=always -d 1 $hidden_opt | 
+    res="$(fd --color=always -d 1 $hidden_opt |
         fzf +m --ansi -e --reverse --color "hl:-1:underline,hl+:-1:underline:reverse" \
         || return 0)"
     if [ -d "$res" ]; then cmd="cd"; else cmd="select"; fi
@@ -378,7 +408,7 @@ cmd findhere ${{
 # The search is limited to a depth of 5 levels
 cmd findfile ${{
     if [ "$lf_hidden" = "true" ]; then hidden_opt="--hidden"; else hidden_opt=""; fi
-    res="$(fd --color=always -d 5 --type=file --fixed-strings $hidden_opt | 
+    res="$(fd --color=always -d 5 --type=file --fixed-strings $hidden_opt |
         fzf +m --ansi -e --reverse \
         --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --preview-window 'right,45%,border-bottom,+{2}+3/3,~3' \
@@ -391,7 +421,7 @@ cmd findfile ${{
 # Hidden dirs are shown in the search only if LF is set to show them
 cmd finddir ${{
     if [ "$lf_hidden" = "true" ]; then hidden_opt="--hidden"; else hidden_opt=""; fi
-    res="$(fd --color=always -d 5 --type=directory --fixed-strings $hidden_opt | 
+    res="$(fd --color=always -d 5 --type=directory --fixed-strings $hidden_opt |
         fzf +m --ansi -e --reverse \
         --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --preview-window 'right,40%,border-bottom,+{2}+3/3,~3' \
@@ -466,6 +496,7 @@ map chm chmod
 map vsc vscode
 map sbl sublime
 map cph copyhere
+map mvh movehere
 map cfp copyfilepath
 map cdp copydirpath
 map clone clone
