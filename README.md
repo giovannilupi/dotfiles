@@ -1,6 +1,6 @@
 # dotfiles
 
-This repository contains a collection of configuration files crafted for my macOS setup. The setup is designed to enhance my experience for development and daily use, striking a harmonious balance between aesthetics and efficiency. The productivity aspects of this setup, pertaining to programs, binaries, and programming workflows, can be easily adapted for use in Linux with minor adjustments.
+This repository contains a collection of configuration files crafted for my macOS setup. The setup is designed to enhance my experience for development and daily use, striking a balance between aesthetics and efficiency. The productivity aspects of this setup, pertaining to programs, binaries, and programming workflows, can be easily adapted for use in Linux with minor adjustments.
 
 This configuration is quite elaborate and makes heavy use of external programs and binaries. Despite its complexity, the configuration remains relatively lean in terms of disk space and memory / CPU overhead.
 
@@ -50,6 +50,8 @@ Here are some of the programs and binaries that I use in this setup.
 [`yabai`](https://github.com/koekeishiya/yabai): tiling window manager
 
 [`skhd`](https://github.com/koekeishiya/skhd): hotkeys for yabai
+
+[`neovim`](https://github.com/neovim/neovim): modern replacement for `vim`
 
 [`eza`](https://github.com/eza-community/eza): replacement for `ls`
 
@@ -141,7 +143,7 @@ The rest of the configuration can be found in the `.zshrc` file. I also created 
 
 ### iTerm2
 
-For my complete iTerm2 configuration, you can find a copy of my settings in the `iterm2` directory of this repository. For the font, I am using [MesloLGS NF](https://github.com/romkatv/powerlevel10k/blob/master/font.md). To enhance the appearance, I am using [this](https://github.com/herrbischoff/iterm2-gruvbox) gruvbox theme, combined with 5% window transparency. To maximize screen real estate, I've removed the title bar in the settings.
+For my complete iTerm2 configuration, you can find a copy of my settings in the `iterm2` directory of this repository. For the font, I am using [MesloLGS NF](https://github.com/romkatv/powerlevel10k/blob/master/font.md). To enhance the appearance, I am using [this](https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/schemes/GruvboxDark.itermcolors) gruvbox theme, combined with 5% window transparency. To maximize screen real estate, I've removed the title bar in the settings.
 
 ### Visual Studio Code
 
