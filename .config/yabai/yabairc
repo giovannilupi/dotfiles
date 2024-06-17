@@ -24,9 +24,9 @@ yabai -m config split_ratio 0.5
 # -----------------------------------------------------------
 
 yabai -m config top_padding 01
-yabai -m config bottom_padding 02
-yabai -m config left_padding 04
-yabai -m config right_padding 04
+yabai -m config bottom_padding 03
+yabai -m config left_padding 03
+yabai -m config right_padding 03
 yabai -m config window_gap 05
 
 # -----------------------------------------------------------
@@ -59,8 +59,11 @@ yabai -m config mouse_drop_action swap
 # Duration of transition between active / normal opacity
 #yabai -m config window_opacity_duration 0.0
 # Force transparency on VSCode
-yabai -m rule --add app="^Code$" opacity=0.96
+yabai -m rule --add app="^VSCodium$" opacity=0.96
 yabai -m rule --add app="^Sublime Text$" opacity=0.97
+yabai -m rule --add app="^Joplin$" opacity=0.98
+yabai -m rule --add app="^zathura$" opacity=0.97
+yabai -m rule --add app="^Telegram$" opacity=1.00
 
 # -----------------------------------------------------------
 # Misc settings
@@ -81,3 +84,6 @@ yabai -m rule --add app="^Keychron Engine$" manage=off
 yabai -m rule --add app="^Discord$" manage=off
 yabai -m rule --add app="^Adobe Photoshop 2020$" manage=off
 yabai -m rule --add app="^Spotify$" manage=off
+yabai -m rule --add app="^GIMP$" manage=off
+yabai -m rule --add app="^Raycast$" manage=off
+yabai -m rule --add app="^Archive Utility$" manage=off
