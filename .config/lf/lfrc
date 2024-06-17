@@ -38,6 +38,7 @@ set filesep "\n"  # default already
 cmd open &{{
     case $(file --mime-type -Lb "$f") in
         text/* | inode/x-empty) lf -remote "send $id \$$EDITOR \$fx";;
+        */pdf) zathura $f >/dev/null 2>&1;;
         *) for file in $fx; do $OPENER "$file" >/dev/null 2>&1 & done;;
     esac
     lf -remote 'send unselect'
@@ -443,6 +444,12 @@ cmd ask_gpt ${{
     fi
 }}
 
+# Open the current file with Zathura
+# Must be a Markdown file
+cmd zathura &{{
+    pandoc -f gfm -t html5 --css ~/Documents/notes/github.css "$f" -o ~/Documents/notes/output.pdf 2> /dev/null | zathura -
+}}
+
 # -----------------------------------------------------------
 # Bindings
 # -----------------------------------------------------------
@@ -504,6 +511,7 @@ map fm openfinder
 map . set hidden!
 map fzf fzf_select
 map zip zip
+map zpdf zathura
 
 # execute current file (must be executable)
 map ex ${{ zsh -ic "$f || exit 0"; lf -remote "send $id quit"}}
@@ -512,6 +520,7 @@ map eX !{{ zsh -ic "$f || exit 0" }}
 # Movement
 map gh cd ~
 map gd cd ~/Documents
-map gp cd ~/Documents/Programming
+map gp cd ~/Documents/projects
 map gi cd ~/Pictures
 map gc cd ~/.config
+map gn cd ~/Documents/notes

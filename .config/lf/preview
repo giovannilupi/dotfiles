@@ -3,7 +3,7 @@
 # Preview function for images
 printimage() {
 	#command chafa -f symbols -O 0 -s "$2x$3" --animate off --polite on "$1"
-	command chafa -f sixel --optimize=9 -s "$2x$3" --animate off --polite on "$1"
+	command chafa -f sixels --optimize=9 -s "$2x$3" --animate off --polite on "$1"
 }
 
 # Preview function for compressed archives
@@ -33,7 +33,7 @@ defaultprint() {
 case "$(file --dereference --brief --mime-type -- "$1")" in
 	*/pdf) 
 		THUMB="/tmp/lfimgthumb"
-		pdftoppm -png -r 60 -f 1 -singlefile "$1" "$THUMB"
+		pdftoppm -png -r 100 -f 1 -singlefile "$1" "$THUMB"
     	printimage "$THUMB.png" "$2" "$3"
     	rm "$THUMB.png"
     	;;
