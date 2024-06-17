@@ -19,11 +19,15 @@ Here are some of the programs and binaries that I use in this setup.
 
 ### Recommended Programs
 
-[`Visual Studio Code`](https://code.visualstudio.com/): main code editor
+[`VSCodium`](https://github.com/VSCodium/vscodium): main code editor
 
-[`Sublime Text`](https://www.sublimetext.com/): alternative code editor and note taking
+[`Sublime Text`](https://www.sublimetext.com/): alternative code editor and quick notes
+
+[`Joplin`](https://github.com/laurent22/joplin): Markdown note taking
 
 [`iTerm2`](https://iterm2.com/): terminal emulator
+
+[`TopNotch`](https://topnotch.app/): blends macbook notch into a black menu bar
 
 [`Raycast`](https://www.raycast.com/): replacement launcher for Spotlight
 
@@ -35,15 +39,13 @@ Here are some of the programs and binaries that I use in this setup.
 
 [`Firefox`](https://www.mozilla.org/en-US/firefox/new/): browser
 
-[`Adobe Photoshop`](https://www.adobe.com/products/photoshop.html): image editing
+[`GIMP`](https://www.gimp.org/): image editing
 
-[`Adobe InDesign`](https://www.adobe.com/products/indesign.html): page layout design
+[`Scribus`](https://wiki.scribus.net/canvas/Download): page layout design
 
-[`Spotify`](https://github.com/dshnkao/SpaceId): music player (patched with [`SpotX-Bash`](https://github.com/SpotX-Official/SpotX-Bash))
+[`Spotify`](https://github.com/SpotX-Official/SpotX-Bash): music player (patched with [`SpotX-Bash`](https://github.com/SpotX-Official/SpotX-Bash))
 
-[`KeePassX`](https://www.keepassx.org/): password manager
-
-[`OmniDiskSweeper`](https://www.omnigroup.com/more): free disk space
+[`KeePassXC`](https://keepassxc.org/): password manager
 
 ### Recommended Binaries
 
@@ -85,6 +87,8 @@ Here are some of the programs and binaries that I use in this setup.
 
 [`cowsay`](https://formulae.brew.sh/formula/cowsay): cow ASCII art with messages
 
+[`boxes`](https://formulae.brew.sh/formula/boxes): draw boxes around text
+
 [`fortune`](https://formulae.brew.sh/formula/fortune): fortune-cookie generator
 
 [`ani-cli`](https://github.com/pystardust/ani-cli): browse and watch anime from terminal
@@ -107,6 +111,14 @@ Here are some of the programs and binaries that I use in this setup.
 
 [`gnumeric`](https://formulae.brew.sh/formula/gnumeric): GNOME Spreadsheet Application
 
+[`zathura-pdf-poppler`](https://github.com/pwmt/zathura-pdf-poppler): PDF viewer
+
+[`groff`](https://formulae.brew.sh/formula/groff): GNU text formatting system
+
+[`pandoc`](https://formulae.brew.sh/formula/pandoc): markup format converter
+
+[`wkhtmltopdf`](https://formulae.brew.sh/formula/groff): HTML to PDF renderer
+
 ## Instructions
 
 Here are some configuration instructions.
@@ -120,11 +132,10 @@ The wallpaper I use can be found in the `.config` directory. You can choose any 
 Most of my custom settings revolve around tweaking the appearance of the macOS interface and optimizing keyboard shortcuts for efficient navigation.
 
 To keep my workspace clutter-free, I prefer to keep the dock hidden at all times. This is easily achieved using a script located in the `raycast` directory, allowing me to toggle the visibility of the dock as needed.
-\
-To provide a solid color to the menu bar, I activate the "Reduce transparency" option in System Settings.
 
 To streamline the use of [yabai](https://github.com/koekeishiya/yabai), I've configured a few custom keybindings. Notably, in the "Keyboard shortcuts" section under "Mission Control," I utilize keybindings such as <kbd>^N</kbd> to switch to desktop N. To ensure seamless functionality, it's essential to deactivate the "Automatically rearrange Spaces based on most recent use" option.
 
+New versions of macOS do not come with Python pre installed. The simplest solution is to create a symlink to the `python3` executable in the `usr/local/bin` directory.
 
 ### Shell
 
@@ -164,29 +175,77 @@ For keybindings, I've only set up one custom binding, which toggles the maximize
     "key": "ctrl+shift+m",
     "command": "workbench.action.toggleMaximizedPanel",
 ```
-To maintain a consistent appearance across my workspace I use [this](https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox) gruvbox dark medium theme, while window transparency is managed through yabai. Some of the other extensions I use in my workflow include: Phind.com, Perl Navigator, ShellCheck, C/C++, Remote - SSH, Remote Explorer, Python, LiveShare, and GitLens.
+To maintain a consistent appearance across my workspace I use [this](https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox) gruvbox dark medium theme, while window transparency is managed through yabai. Some of the other extensions I use in my workflow include: Codeium, Perl Navigator, ShellCheck, C/C++, Python, LiveShare, and GitLens.
 
 ### Sublime Text
 
-I use Sublime as alternative code editor (mainly for scripting) and for note taking purposes. The `raycast` directory includes a script to open at its last line a note file located at `~/Documents/notes`. For appearance, I am using [this](https://github.com/Briles/gruvbox) gruvbox theme and color scheme. To optimize screen real estate, I've reduced the size of tabs and the status bar using some custom settings (Preferences):
+I use Sublime as alternative code editor (mainly for scripting) and for note taking purposes. The `raycast` directory includes a script to open at its last line a note file located at `~/Documents/notes`. For appearance, I am using [this](https://github.com/Briles/gruvbox) gruvbox theme and color scheme. To optimize screen real estate, I've reduced the size of tabs and the status bar using some custom settings (Preferences). I have also adjusted the font to Fira Code with ligatures enabled:
 ```
-	"color_scheme": "gruvbox (Dark) (Medium).sublime-color-scheme",
-	"font_size": 18,
+	"color_scheme": "Packages/gruvbox/gruvbox (Dark) (Medium).sublime-color-scheme",
+	"font_size": 16,
 	"theme": "gruvbox.sublime-theme",
 	"gruvbox_tabs_xxs": true,
 	"gruvbox_statusbar_xxs": true,
+	"font_face": "Fira Code",
+  	"font_options":
+  	[
+    	"subpixel_antialias",
+    	"gray_antialias",
+  	],
 ```
-Window transparency is managed through yabai.
+To enable opening Sublime from the terminal, I use this command:
+```
+sudo ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/local/bin/subl
+```
 
-To disable the periodic license popup, add the following lines to `/etc/hosts`:
-```
-127.0.0.1       www.sublimetext.com
-127.0.0.1       license.sublimehq.com
-```
+### Joplin
+
+I configure Joplin with a variant of [this](https://github.com/robotcorner/joplin-theme-dark-gruvbox) gruvbox theme, over which I have slightly changed the colors and the fonts to [Fira Sans](https://github.com/mozilla/Fira) and Fira Code.
+
+I use both the GUI and terminal versions of Joplin, which are two distinct applications. Using an alias, I have configured the terminal version to use the same database as the GUI version. I also added two shell function to handle notes as markdown files. This allows me to read notes without opening them in the Joplin GUI. Using the `joplexp` function, I can export all Joplin notes to the `~/Documents/notes` directory. With the `mdtopdf` function, I can convert a note to PDF and automatically open it in zathura.
+
+### Zathura
+
+There is currently no official homebrew formula for installing zathura on macOS. I recommend compiling the source code and installing it manually, leveraging homebrew to install the required dependencies. You might need to manually adjust the content of `meson.build` prior to compilation to specify explicitly the path of some of the dependencies. I use `zathura-pdf-poppler` as PDF plugin, as it's the only one with native macOS integration.
 
 ### Firefox
 
-Firefox is my default browser. To enhance privacy and minimize data collection, I disable telemetry and data collection following [this](https://wiki.archlinux.org/title/Firefox/Privacy) and [this](https://github.com/K3V1991/Disable-Firefox-Telemetry-and-Data-Collection) guide. To visually integrate with my setup, I am using [this](https://addons.mozilla.org/en-US/firefox/addon/gruvboxtheme/) gruvbox theme. As browsing add-ons, I am using uBlock Origin and TWP - Translate Web Pages.
+Firefox is my main browser. By deafult, Firefox collects a lot of telemetry data and has relatively mild privacy protection settings. To enhance privacy and minimize data collection, I use the `user.js` configuration from [arkenfox](https://github.com/arkenfox/user.js) in a dedicated Firefox profile, created in `about:profiles`. Arkenfox policy is quite restrictive and causes usability issues out of the box. These can be mitigated by overriding some of its settings in a dedicated `user-overrides.js` file. I use the following overrides:
+```js
+// Enable session restore
+user_pref("browser.startup.page", 3);
+// Enable URL bar search
+user_pref("keyword.enabled", true);
+// Enable search and form history
+user_pref("browser.formfill.enable", true);
+// Don't clear browsing history on shutdown
+user_pref("privacy.clearOnShutdown.history", false);
+// Match previous setting for Ctrl+Shift+Del
+user_pref("privacy.cpd.history", false);
+// Enable live search suggestions as you type in the address bar
+user_pref("browser.search.suggest.enabled", true);
+// Enable favicons in bookmarks
+user_pref("browser.shell.shortcutFavicons", true);
+// Disable altering viewport size)
+user_pref("privacy.resistFingerprinting.letterboxing", false);
+// Page for new windows
+user_pref("browser.startup.homepage", "about:home");
+// Page for new tab
+user_pref("browser.newtabpage.enabled", true);
+```
+Despite relaxing some arkenfox settings for convenience, certain mild inconveniences persist.
+
+Historically, Firefox's built-in password manager has faced harsh criticism for storing user passwords in plain text. Regardless of recent improvements, password management isn't a browser's core function and such task is better suited for dedicated tools. As a result, arkenfox is set to never saves passwords persistently. To support auto-fill I use KeePassXC in combination with its Firefox [add-on](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/).
+
+Arkenfox deletes all cookies and site data on browser close. This means that logins are not preserved between sessions. The best approach to overcome this is to selectively allow cookies for the websites we want to preserve our login. To enable cookies for the current website:
+\
+`Cmd+I` > Permissions > Cookies > Allow
+
+Nowadays, numerous websites offer both light and dark themes to accommodate user preferences. These sites often employ JavaScript to detect the user's theme setting on their device. With Arkenfox's settings, this detection mechanism frequently fails, leading websites to default to the light theme. To force the use of a dark theme, I use the [Dark Reader](https://darkreader.org/) add-on. I have configured the add-on to use the gruvbox theme, tweaking the foreground color to `d5c4a1` instead of the default. To enable a theme in Dark Reader, follow [this](https://github.com/darkreader/darkreader/discussions/8573) guide. To confirm to the whole browser to gruvbox, I use [this](https://addons.mozilla.org/en-US/firefox/addon/gruvboxtheme/) theme. As minor UI adjustments, I disable the bookmark bar and remove Pocket from the toolbar.
+
+It is important to note that arkenfox does not change the brwoser's default search engine. If you care about privacy, you may want to switch from Google to a more private alternative. Specifically, I am using [this](https://priv.au/) public instance of [SearXNG](https://github.com/searxng/searxng), which offers good performance from my geographical location. To add a custom search engine into Firefox, you can refer to [this](https://superuser.com/questions/7327/how-to-add-a-custom-search-engine-to-firefox) discussion. In the Preferences, I have configured SearXNG to mirror exactly the searcgh results from Google. Note that, to retain your search engine preferences within Firefox, it's essential to allow cookies on the search engine's homepage.
+
+Lastly, as I often browse foreign websites, I use the [TWP - Translate Web Pages](https://addons.mozilla.org/en-US/firefox/addon/traduzir-paginas-web/) extensions to handle text translation.
 
 ### yabai
 

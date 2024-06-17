@@ -71,7 +71,7 @@ DISABLE_MAGIC_FUNCTIONS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting copypath dirbrowse extract history)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting copypath dirbrowse extract)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -82,12 +82,8 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+# Preferred editor
+export EDITOR='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -98,8 +94,10 @@ alias cat="bat -p -P"
 alias ls="eza --icons --group-directories-first"
 alias ll="eza --long --icons --group-directories-first"
 alias la="eza --long --icons --group-directories-first -a"
+alias tree="eza --tree --icons"
 alias man="batman"
 alias diff="batdiff"
+alias joplin="joplin --profile $HOME/.config/joplin-desktop 2> /dev/null"
 alias -g errout="2>&1 >/dev/null"
 
 # Functions
@@ -109,7 +107,7 @@ lfcd () {
 alias lf="lfcd"
 
 imgview() {
-    command chafa -f sixel --optimize=9 --animate off --polite on "$@"
+    command chafa -f iterm --optimize=9 --animate off --polite on "$@"
 }
 
 tgptf() {
@@ -117,6 +115,16 @@ tgptf() {
     if [ -t 0 ]; then content=$(cat "$1") else content=$(cat) fi
     content="${content}"$'\n'
     tgpt -preprompt "$content" -m
+}
+
+joplexp() {
+    find ~/Documents/notes -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+    joplin export ~/Documents/notes --format md
+    printf "%s\n" "Joplin notes exported to ~/Documents/notes"
+}
+
+mdtopdf() {
+    (pandoc -f gfm -t html5 --css ~/Documents/notes/github.css "$1" -o ~/Documents/notes/output.pdf 2> /dev/null | zathura - &)
 }
 
 # Updater for installation using the installer script
@@ -133,32 +141,14 @@ export BAT_THEME=gruvbox-dark
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Fzf shell integration.
+source <(fzf --zsh)
 
 [ -f ~/.config/fzfscripts.sh ] && source ~/.config/fzfscripts.sh
 
-# Forgit configuration
-# Homebrew installation, for Linux install as ohmyzsh plugin instead
-export FORGIT_PAGER="delta --navigate -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS} --wrap-max-lines 2"
-export FORGIT_FZF_DEFAULT_OPTS="--height='100%' --color 'hl:-1:underline,hl+:-1:underline:reverse' --preview-window 'up,40%,border-bottom,+{2}+3/3,~3'"
-export FORGIT_BLAME_PAGER="delta --navigate --hyperlinks"
-export FORGIT_DIFF_PAGER="delta --navigate --side-by-side --line-numbers-right-format='│ ' -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS} --wrap-max-lines 2"
-export FORGIT_DIFF_FZF_OPTS="--preview-window 'up,80%,border-bottom,+{2}+3/3,~3'" 
-export FORGIT_ADD_FZF_OPTS="--preview-window 'up,60%,border-bottom,+{2}+3/3,~3'"
-export FORGIT_LOG_FZF_OPTS="--preview-window 'up,50%,border-bottom,+{2}+3/3,~3'"
-export FORGIT_CHECKOUT_FILE_FZF_OPTS="--preview-window 'up,75%,border-bottom,+{2}+3/3,~3'" 
-export FORGIT_CHECKOUT_BRANCH_BRANCH_GIT_OPTS="--list"
-export FORGIT_CHECKOUT_BRANCH_FZF_OPTS="--preview-window 'up,35%,border-bottom,+{2}+3/3,~3'"
-export FORGIT_BRANCH_DELETE_FZF_OPTS=""
-
-[ -f /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh ] && source /usr/local/opt/forgit/share/forgit/forgit.plugin.zsh
-
 # Perl configuration
-export PATH="$PATH:~/local/bin"
-PATH="~/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="~/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="~/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"~/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=~b/perl5"; export PERL_MM_OPT;
-LC_CTYPE=en_US.UTF-8
-LC_ALL=en_US.UTF-8
+PATH="/Users/gioel/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/gioel/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/gioel/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/gioel/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/gioel/perl5"; export PERL_MM_OPT;
