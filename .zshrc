@@ -95,6 +95,8 @@ alias ls="eza --icons --group-directories-first"
 alias ll="eza --long --icons --group-directories-first"
 alias la="eza --long --icons --group-directories-first -a"
 alias tree="eza --tree --icons"
+alias vi="nvim"
+alias htop="btm -b --color gruvbox"
 alias man="batman"
 alias diff="batdiff"
 alias joplin="joplin --profile $HOME/.config/joplin-desktop 2> /dev/null"
@@ -136,6 +138,14 @@ yabai-update() {
     yabai --start-service
 }
 
+cpprun() {
+    g++-14 -std=c++17 "$@" && ./a.out && rm ./a.out
+}
+
+qcpp() {
+    cp ~/Documents/projects/leetcode/template.cpp "$1" && nvim "$1"
+}
+
 export BAT_THEME=gruvbox-dark
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -152,3 +162,4 @@ PERL5LIB="/Users/gioel/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LI
 PERL_LOCAL_LIB_ROOT="/Users/gioel/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/Users/gioel/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/gioel/perl5"; export PERL_MM_OPT;
+
