@@ -1,4 +1,5 @@
 return {
+    -- Shows available keybinds when pressing the leader key
     "folke/which-key.nvim",
     event = "VeryLazy",
     init = function()

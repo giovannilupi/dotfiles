@@ -1,3 +1,4 @@
+-- Interface for interacting with vimscript options table in lua
 local opt = vim.opt
 
 -- line numbers
@@ -41,9 +42,9 @@ opt.mouse = "a"  -- allow the mouse to be used in all modes
 opt.wrap = false  -- line wrapping
 opt.cursorline = false  -- highlight the current line
 opt.termguicolors = true  -- enable RGB color in the TUI
-opt.background = "dark"  -- colorschemes that can be light or dark will be made dark
+opt.background = "dark"   -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "yes"  -- always draw sign column
-opt.scrolloff = 8  -- number of screen lines to keep above and below the cursor
+opt.scrolloff = 999  -- keep the cursor in the middle of the screen when scrolling verticalg
 opt.sidescrolloff = 8  -- columns of context
 
 -- split windows
@@ -57,5 +58,5 @@ opt.swapfile = false  -- use a swapfile for the buffer
 opt.isfname:append("@-@")  -- add support for @ character in file names
 opt.laststatus = 3  -- global statusline
 opt.showmode = false -- don't show mode since we have a statusline
-opt.spelllang = { "en" }
-
+opt.virtualedit = "block"  -- allow cursor to move where there is no text in visual block mode
+opt.spelllang = { "en" }  -- set spell languages
