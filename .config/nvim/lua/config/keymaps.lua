@@ -55,3 +55,12 @@ function _G.toggle_diagnostics()
     end
 end
 vim.api.nvim_buf_set_keymap(0, 'n', '<Leader>dg', ':call v:lua.toggle_diagnostics()<CR>', {silent=true, noremap=true, desc="Toggle diagnostics", })
+
+-- Highlight when yanking text
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking text',
+  group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})

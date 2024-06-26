@@ -22,6 +22,13 @@ return {
                         ["<esc>"] = require("telescope.actions").close
                     },
                 },
+                layout_strategy="vertical",
+                layout_config = {
+                    vertical = {
+                        width = 0.9,
+                        height = 0.9,
+                    },
+                },
             },
 
             extensions = {
@@ -49,7 +56,7 @@ return {
         vim.keymap.set('n', '<leader>/', function()
             -- You can pass additional configuration to Telescope to change the theme, layout, etc.
             builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-                previewer = false,
+                previewer = false, layout_config = {width = 0.85, height = 0.55},
             })
         end, { desc = '[/] Fuzzily search in current buffer' })
 
