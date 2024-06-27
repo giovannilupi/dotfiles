@@ -78,12 +78,7 @@ yabai -m config insert_feedback_color 0xff519aba
 # Float settings
 # -----------------------------------------------------------
 
-yabai -m rule --add app="^System Settings$" manage=off
-yabai -m rule --add app="^Logi Options\+$" manage=off
-yabai -m rule --add app="^Keychron Engine$" manage=off
-yabai -m rule --add app="^Discord$" manage=off
-yabai -m rule --add app="^Adobe Photoshop 2020$" manage=off
-yabai -m rule --add app="^Spotify$" manage=off
-yabai -m rule --add app="^GIMP$" manage=off
-yabai -m rule --add app="^Raycast$" manage=off
-yabai -m rule --add app="^Archive Utility$" manage=off
+# Programs to exclude from window management
+mgoff="(Calculator|GIMP|notes|System Preferences|System Settings|Spotify|Discord|Raycast|Archive Utility)"
+yabai -m rule --add app="^${mgoff}$" manage=off
+

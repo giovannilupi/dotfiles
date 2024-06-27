@@ -447,7 +447,7 @@ cmd ask_gpt ${{
 # Open the current file with Zathura
 # Must be a Markdown file
 cmd zathura &{{
-    pandoc -f gfm -t html5 --css ~/Documents/notes/github.css "$f" -o ~/Documents/notes/output.pdf 2> /dev/null | zathura -
+    pandoc -f gfm -t html5 "$f" -o ~/Documents/notes/output.pdf 2> /dev/null | zathura -
 }}
 
 # -----------------------------------------------------------

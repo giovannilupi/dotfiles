@@ -139,7 +139,7 @@ yabai-update() {
 }
 
 cpprun() {
-    g++-14 -std=c++17 "$@" && ./a.out && rm ./a.out
+    g++-14 -std=c++20 "$@" && ./a.out && rm ./a.out
 }
 
 qcpp() {
@@ -162,4 +162,6 @@ PERL5LIB="/Users/gioel/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LI
 PERL_LOCAL_LIB_ROOT="/Users/gioel/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/Users/gioel/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/gioel/perl5"; export PERL_MM_OPT;
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
 
