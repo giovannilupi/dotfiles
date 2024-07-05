@@ -97,6 +97,7 @@ alias la="eza --long --icons --group-directories-first -a"
 alias tree="eza --tree --icons"
 alias vi="nvim"
 alias htop="btm -b --color gruvbox"
+alias lg="lazygit"
 alias man="batman"
 alias diff="batdiff"
 alias joplin="joplin --profile $HOME/.config/joplin-desktop 2> /dev/null"
@@ -126,7 +127,7 @@ joplexp() {
 }
 
 mdtopdf() {
-    (pandoc -f gfm -t html5 --css ~/Documents/notes/github.css "$1" -o ~/Documents/notes/output.pdf 2> /dev/null | zathura - &)
+    (pandoc -f gfm -t html5 "$1" -o ~/Documents/notes/output.pdf 2> /dev/null | zathura - &)
 }
 
 # Updater for installation using the installer script
@@ -139,11 +140,14 @@ yabai-update() {
 }
 
 cpprun() {
-    g++-14 -std=c++20 "$@" && ./a.out && rm ./a.out
+    g++-14 -std=c++20 "$@"; ./a.out; rm ./a.out
 }
 
 qcpp() {
-    cp ~/Documents/projects/leetcode/template.cpp "$1" && nvim "$1"
+    local f_name="$1"
+    if [[ ! $1 =~ \.cpp$ ]]; then f_name="${f_name}.cpp"; fi
+    if [[ -e $f_name ]]; then printf "%s\n" "$f_name already exists"; return 1; fi
+    if cp -n ~/Documents/projects/leetcode/template.cpp "$f_name"; then nvim "$f_name"; fi
 }
 
 export BAT_THEME=gruvbox-dark
@@ -164,4 +168,3 @@ PERL_MB_OPT="--install_base \"/Users/gioel/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/gioel/perl5"; export PERL_MM_OPT;
 LC_CTYPE=en_US.UTF-8
 LC_ALL=en_US.UTF-8
-
