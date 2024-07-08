@@ -71,7 +71,7 @@ DISABLE_MAGIC_FUNCTIONS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting copypath dirbrowse extract)
+plugins=(zsh-autosuggestions zsh-syntax-highlighting copypath dirbrowse extract)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -97,7 +97,6 @@ alias la="eza --long --icons --group-directories-first -a"
 alias tree="eza --tree --icons"
 alias vi="nvim"
 alias htop="btm -b --color gruvbox"
-alias lg="lazygit"
 alias man="batman"
 alias diff="batdiff"
 alias joplin="joplin --profile $HOME/.config/joplin-desktop 2> /dev/null"
@@ -159,6 +158,21 @@ export BAT_THEME=gruvbox-dark
 source <(fzf --zsh)
 
 [ -f ~/.config/fzfscripts.sh ] && source ~/.config/fzfscripts.sh
+
+# Forgit configuration
+# Homebrew installation, for Linux install as ohmyzsh plugin instead
+[ -f $HOMEBREW_PREFIX/share/forgit/forgit.plugin.zsh ] && source $HOMEBREW_PREFIX/share/forgit/forgit.plugin.zsh
+export FORGIT_PAGER="delta --navigate -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS} --wrap-max-lines 2"
+export FORGIT_FZF_DEFAULT_OPTS="--height='100%' --color 'hl:-1:underline,hl+:-1:underline:reverse' --preview-window 'up,40%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_BLAME_PAGER="delta --navigate --hyperlinks"
+export FORGIT_DIFF_PAGER="delta --navigate --side-by-side --line-numbers-right-format='? ' -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS} --wrap-max-lines 2"
+export FORGIT_DIFF_FZF_OPTS="--preview-window 'up,80%,border-bottom,+{2}+3/3,~3'" 
+export FORGIT_ADD_FZF_OPTS="--preview-window 'up,60%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_LOG_FZF_OPTS="--preview-window 'up,50%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_CHECKOUT_FILE_FZF_OPTS="--preview-window 'up,75%,border-bottom,+{2}+3/3,~3'" 
+export FORGIT_CHECKOUT_BRANCH_BRANCH_GIT_OPTS="--list"
+export FORGIT_CHECKOUT_BRANCH_FZF_OPTS="--preview-window 'up,35%,border-bottom,+{2}+3/3,~3'"
+export FORGIT_BRANCH_DELETE_FZF_OPTS=""
 
 # Perl configuration
 PATH="/Users/gioel/perl5/bin${PATH:+:${PATH}}"; export PATH;
