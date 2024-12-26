@@ -49,6 +49,8 @@ Here are some of the programs and binaries that I use in this setup.
 
 ### Recommended Binaries
 
+[`homebrew`](https://brew.sh/): macOS package manager
+
 [`yabai`](https://github.com/koekeishiya/yabai): tiling window manager
 
 [`skhd`](https://github.com/koekeishiya/skhd): hotkeys for yabai
