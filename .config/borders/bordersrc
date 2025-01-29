@@ -1,0 +1,6 @@
+#!/bin/dash
+
+# Colors taken from tokyonight theme
+GRUV_WHITE="0xfffbf1c7"
+
+borders active_color="$GRUV_WHITE" hidpi=on width=7.0
