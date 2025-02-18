@@ -27,7 +27,7 @@ return {
                 "html",
                 "jsonls",
                 "jdtls",
-                "tsserver",
+                "ts_ls",
                 "lua_ls",
                 "autotools_ls",
                 "markdown_oxide",
